@@ -3,26 +3,28 @@
  * Para comprender cómo funciona el método que acontece, es necesario ver cómo funcionan las promesas de JavaScript:
  * https://desarrolloweb.com/articulos/introduccion-promesas-es6.html
  * @author Santiago San Pablo Raposo
- * @version 25.02.2023
+ * @version 01.04.2023
  */
 
 /**
  * Función que permite obtener un JSON desde un servidor web. Sin los parámetros opcionales, el comportamiento por defecto es usar el método GET sin parámetros.
  * @param {string} url Especifica la URL desde la que se quiere obtener el JSON.
  * @param {string} metodo (Opcional) Especifica mediante una cadena de texto el metodo que se quiere emplear en la cabecera de la petición HTTP.
+ * @param {object} headers (Opcional) Especifica un objeto literal con los headers que deseas enviar al servidor.
  * @param {object} datos (Opcional) Especifica un objeto literal con los parámetros que deseas enviar al servidor.
  * @returns Un JSON / objeto literal con los datos que devuelva la API en el servidor en la ruta especificada.
  */
-function obtenerJSON(url, metodo = "GET", datos = null) {
+function obtenerJSON(url, metodo = "GET", headers = null, datos = null) {
     return new Promise((resolve, reject) => {
         /*-- Verificar datos de los parámetros --*/
         if (metodo != "GET" && metodo != "POST" && metodo != "PUT" && metodo != "DELETE") {
             reject("El método especificado no es correcto. Especifica GET, POST, PUT o DELETE");
         }
 
-        if (datos != null && typeof(datos) != "object") {
-            reject("Especifica los parámetros de la petición en un objeto literal/JSON");
-        }
+        // if (datos != null && typeof(datos) != "object") {
+        //     reject("Especifica los parámetros de la petición en un objeto literal/JSON");
+        // }
+        // datos no tiene por qué ser un objeto literal/JSON.
 
         /*-- Efectúa la petición al servidor --*/
         switch (metodo) {
@@ -34,7 +36,7 @@ function obtenerJSON(url, metodo = "GET", datos = null) {
                 }
 
                 /*-- Realiza la petición al servidor --*/
-                fetch(direccion, {method: metodo})
+                fetch(direccion, {method: metodo, "headers": headers})
                     .then(response => {
                         console.dir(response);
                         if (response.ok) {
@@ -57,7 +59,7 @@ function obtenerJSON(url, metodo = "GET", datos = null) {
                 }
 
                 /*-- Realiza la petición al servidor --*/
-                fetch(url, {method: metodo, body: datos})
+                fetch(url, {method: metodo, "headers": headers, body: datos})
                     .then(response => {
                         if (response.ok) {
                             return response.text();
@@ -78,4 +80,3 @@ function obtenerJSON(url, metodo = "GET", datos = null) {
         }
     });
 }
-
