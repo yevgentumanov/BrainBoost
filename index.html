@@ -90,32 +90,38 @@
       </nav>
 
       <!-- Barra de navegación para las materias de la aplicación -->
-      <nav class="row navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
-        <!-- Links -->
-        <ul class="navbar-nav">
-          <!-- Dropdown -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Materias</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Artes (Música, Artes Visuales, Teatro)</a>
-              <a class="dropdown-item" href="#">Ciencias Naturales (Biología, Química y Física)</a>
-              <a class="dropdown-item" href="#">Educación Física</a>
-              <a class="dropdown-item" href="#">Filosofía</a>
-              <a class="dropdown-item" href="#">Geografía</a>
-              <a class="dropdown-item" href="#">Historia</a>
-              <a class="dropdown-item" href="#">Lengua Extranjera (Inglés, Francés, Alemán, etc.)</a>
-              <a class="dropdown-item" href="#">Literatura</a>
-              <a class="dropdown-item" href="#">Matemáticas</a>
-              <a class="dropdown-item" href="#">Tecnología</a>
-            </div>
-          </li>
+          <nav class="row navbar bg-dark navbar-dark sticky-top">
 
-          <!-- Enlace a la página de creación de test -->
-          <li class="nav-item">
-            <a class="nav-link" href="#">Crear un test personalizado</a>
-          </li>
-        </ul>
-      </nav>
+            <!-- Modo contraido -->
+            <button class="navbar-toggler nav-ico" type="button" data-toggle="collapse" data-target="#navbarMaterias"
+              aria-controls="navbarMaterias" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>&nbsp;Materias
+            </button>
+
+            <button class="navbar-toggler nav-ico" type="button" data-toggle="collapse" data-target="#"
+              aria-controls="" aria-expanded="false" aria-label="Toggle navigation">
+              <span class=""></span>Crear un test personalizado
+            </button>
+            
+            <!-- Links -->
+            <ul class="collapse navbar-collapse" id="navbarMaterias">
+              <a class="nav-link" href="#">Inicio</a>
+              <a class="nav-link" href="#">Artes (Música, Artes Visuales, Teatro)</a>
+              <a class="nav-link" href="#">Ciencias Naturales (Biología, Química y Física)</a>
+              <a class="nav-link" href="#">Educación Física</a>
+              <a class="nav-link" href="#">Filosofía</a>
+              <a class="nav-link" href="#">Geografía</a>
+              <a class="nav-link" href="#">Historia</a>
+              <a class="nav-link" href="#">Lengua Extranjera (Inglés, Francés, Alemán, etc.)</a>
+              <a class="nav-link" href="#">Literatura</a>
+              <a class="nav-link" href="#">Matemáticas</a>
+              <a class="nav-link" href="#">Tecnología</a>
+
+              <!-- Enlace a la página de creación de test -->
+            </ul>
+
+          </nav>
+
     </header>
     <main class="row">
 
