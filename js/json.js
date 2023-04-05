@@ -14,7 +14,7 @@
  * @param {object} datos (Opcional) Especifica un objeto literal con los parámetros que deseas enviar al servidor.
  * @returns Un JSON / objeto literal con los datos que devuelva la API en el servidor en la ruta especificada.
  */
-function obtenerJSON(url, metodo = "GET", headers = null, datos = null) {
+export function obtenerJSON(url, metodo = "GET", headers = null, datos = null) {
     return new Promise((resolve, reject) => {
         /*-- Verificar datos de los parámetros --*/
         if (metodo != "GET" && metodo != "POST" && metodo != "PUT" && metodo != "DELETE") {
