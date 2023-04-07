@@ -70,10 +70,10 @@ function obtenerPreguntasTest(test = null) {
 }
 
 /**
- * Función para crear un test random, con el único fin de realizar pruebas mientras no se tenga implementada la parte del lado del servidor. 
+ * Función para crear un test random con múltiples respuestas, con el único fin de realizar pruebas mientras no se tenga implementada la parte del lado del servidor.
  * @param {number} nPreguntas Especifica el numero de preguntas que quieres que tenga el test random.
  */
-export function crearTestRandom(nPreguntas) {
+export function crearTestMultiplesRespuestasRandom(nPreguntas) {
     /*-- Creación de variables --*/
     let test;
     let preguntas = Array();
@@ -84,6 +84,30 @@ export function crearTestRandom(nPreguntas) {
         preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta 1", "respuestas":
         respuestas,
         "respuesta_correcta": respuestas[utilities.Random.randomInt(0, respuestas.length)]});
+    }
+
+    /*-- Creación del test --*/
+    test = new Test(utilities.Random.randomInt(1, 100), preguntas);
+
+    /*-- Devuelve el test creado --*/
+    return test;
+}
+
+/**
+ * Función para crear un test random con una única respuesta posible, con el único fin de realizar pruebas mientras no se tenga implementada la parte del lado del servidor.
+ * @param {number} nPreguntas Especifica el número de pregutnas que quieres que tenga el test random.
+ * @returns 
+ */
+export function crearTestRespuestaUnica(nPreguntas) {
+    /*-- Creación de variables --*/
+    let test;
+    let preguntas = Array();
+    let palabras = ["perro", "gato", "casa", "coche", "jardín", "libro"];
+    
+    /*-- Creación de las preguntas random --*/
+    for (let i = 0; i < nPreguntas; i++) {
+        preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta 1",
+        "respuesta_correcta": palabras[utilities.Random.randomInt(0, palabras.length)]});
     }
 
     /*-- Creación del test --*/
