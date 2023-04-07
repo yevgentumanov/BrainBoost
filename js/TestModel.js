@@ -96,7 +96,7 @@ export function crearTestMultiplesRespuestasRandom(nPreguntas) {
 /**
  * Función para crear un test random con una única respuesta posible, con el único fin de realizar pruebas mientras no se tenga implementada la parte del lado del servidor.
  * @param {number} nPreguntas Especifica el número de pregutnas que quieres que tenga el test random.
- * @returns 
+ * @returns Un test random de única respuesta posible (tiene que ser escrita).
  */
 export function crearTestRespuestaUnica(nPreguntas) {
     /*-- Creación de variables --*/
