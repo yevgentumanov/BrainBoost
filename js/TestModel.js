@@ -1,14 +1,28 @@
-/*-- Importaciones --*/
+/*=====================================
+            IMPORTACIONES
+ =====================================*/
 import * as apij from './json.js';
 import * as utilities from './utilidades.js';
 
+/*====================================
+            ENUMERADOS
+======================================*/
+const TipoTest = {
+    NONE: 0,
+    MULTIPLE_CHOICE: 1,
+    UNIQUE_RESPONSE: 2
+}
+
+/*====================================
+            CLASES
+======================================*/
 export class Test {
     /**
      * Constructor para crear un objeto de tipo test, que contendrá un test recogido de la BB.DD de la aplicación.
      * @param {number} idTest Especifica el id del test en la BB.DD.
      * @param {object} preguntas Array que contiene las preguntas del test y respuestas a cada una de ellas, así como su respuesta correcta.
      */
-    constructor(idTest, preguntas, length = null) {
+    constructor(idTest, preguntas, length = null, tipoTest = TipoTest.NONE) {
         if (typeof(idTest) == "number", typeof(preguntas) == "object") {
             /*-- Atributos de la clase --*/
             this.id_test = idTest;
@@ -18,6 +32,7 @@ export class Test {
                 this.length = length;
             }
             this.preguntas = preguntas;
+            this.tipoTest = tipoTest;
         }
     }
 
@@ -44,7 +59,15 @@ export class Test {
     getPregunta(idPregunta) {
         return this.preguntas[idPregunta];
     }
+
+    getTipoTest() {
+        return this.tipoTest;
+    }
 }
+
+/*==========================================
+        MÉTODOS ASOCIADOS AL MODELO
+===========================================*/
 
 /**
  * (Método implementado solo parcialmente).
@@ -65,7 +88,7 @@ function obtenerPreguntasTest(test = null) {
 
     });
 
-    /*-- Devuelve el resultado de la variable tests (el controlador se encargará de verificar si esto ha devuelto realmente la lista de tests o un error --*/
+    /*-- Devuelve el resultado de la variable tests (el controlador se encargará de verificar si esto ha devuelto realmente la lista de tests o un error) --*/
     return tests;
 }
 
@@ -81,7 +104,7 @@ export function crearTestMultiplesRespuestasRandom(nPreguntas) {
     
     /*-- Creación de las preguntas random --*/
     for (let i = 0; i < nPreguntas; i++) {
-        preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta 1", "respuestas":
+        preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta " + (i + 1), "respuestas":
         respuestas,
         "respuesta_correcta": respuestas[utilities.Random.randomInt(0, respuestas.length)]});
     }
@@ -106,7 +129,7 @@ export function crearTestRespuestaUnica(nPreguntas) {
     
     /*-- Creación de las preguntas random --*/
     for (let i = 0; i < nPreguntas; i++) {
-        preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta 1",
+        preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta " + (i + 1),
         "respuesta_correcta": palabras[utilities.Random.randomInt(0, palabras.length)]});
     }
 

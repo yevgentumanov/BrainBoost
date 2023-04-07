@@ -1,7 +1,13 @@
 /*-- Fichero donde se implementarán métodos para crear la vista del test dinámicamente, con los datos que reciba de TestModel --*/
-/*-- Importaciones --*/
+/*=====================================
+            IMPORTACIONES
+ =====================================*/
 import * as model from './TestModel.js';
 import * as utilities from './utilidades.js';
+
+/*==========================================
+        MÉTODOS ASOCIADOS A LA VISTA
+===========================================*/
 
 function prueba() {
     let prueba = new model.Test(utilities.Random.randomInt(1, 100), [
@@ -15,5 +21,6 @@ function prueba() {
     ]);
 
     console.log(prueba.getLength());
-    
+
+    let prueba2 = model.crearTestRespuestaUnica(10);
 }
