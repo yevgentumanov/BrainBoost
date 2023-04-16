@@ -24,8 +24,8 @@ const TipoPregunta = {
 export class Test {
     /**
      * Constructor para crear un objeto de tipo test, que contendrá un test recogido de la BB.DD de la aplicación.
-     * @param {number} idTest Especifica el id del test en la BB.DD.
-     * @param {Array} preguntas Objeto JSON que contiene las preguntas del test y respuestas a cada una de ellas, así como su respuesta correcta.
+     * @param {number} idTest Especifica el id del test en la BB.DD. Lo especificará el controlador, observando la "bandera" que dejaremos mediante PHP dentro del código fuente de la página web.
+     * @param {object} preguntas Objeto JSON que contiene las preguntas del test y respuestas a cada una de ellas, así como su respuesta correcta.
      * @param {string} categoriaTest Especifica la categoría/materia a la que pertenece el test.
      * 
      */
@@ -71,21 +71,7 @@ export class Test {
         /*-- Más atributos del test en sí --*/
         if (nombreTest) {
             this.nombre_test = nombreTest;
-        } else {
-            this.nombre_test = null;
         }
-
-        /*-- Atributos relacionados con el usuario que lo realiza --*/
-        this.nota; // Nota que ha sacado el usuario en ese test
-        this.fecha_realizacion;
-    }
-
-    /**
-     * Devuelve el tamaño del test (nº de preguntas).
-     * @returns El tamaño del test (nº de preguntas).
-     */
-    getLength() {
-        return this.length;
     }
 
     /**
@@ -97,6 +83,14 @@ export class Test {
     }
 
     /**
+     * Devuelve el tamaño del test (nº de preguntas).
+     * @returns El tamaño del test (nº de preguntas).
+     */
+    getLength() {
+        return this.length;
+    }
+
+    /**
      * Devuelve la pregunta especificada por ID (no el ID de la BB.DD, sino el del array interno donde se almacenan las preguntas), junto con sus respuestas y su respuesta correcta.
      * @param {number} idPregunta Especifica el id de la pregunta que quieres obtener.
      */
@@ -105,14 +99,18 @@ export class Test {
     }
 
     /**
-     * Método para añadir una pregunta al test
+     * Método para añadir una pregunta al test.
+     * @param {object} pregunta Especifica el objeto JSON que contiene la pregunta y sus datos, tal como se muestra en los example_*.json.
      */
     addPregunta(pregunta) {
         this.preguntas.push(pregunta);
+        this.length++;
     }
 
     /**
      * Método que permite modificar una pregunta.
+     * @param {number} idPregunta Especifica el id de la pregunta (se refiere al ID del array).
+     * @param {object} pregunta Especifica el objeto JSON que contiene la pregunta y sus datos, tal como se muestra en los example_*.json.
      */
     modifyPregunta(idPregunta, pregunta) {
         this.preguntas[idPregunta] = pregunta;
@@ -120,10 +118,11 @@ export class Test {
 
     /**
      * Método que sirve para eliminar una pregunta dentro del objeto test.
-     * @param {number} idPregunta Especifica el id de la pregunta (id numérico para identificar dentro del array de preguntas)
+     * @param {number} idPregunta Especifica el id de la pregunta (id numérico para identificar dentro del array de preguntas).
      */
     removePregunta(idPregunta) {
         this.preguntas.splice(idPregunta, 1);
+        this.length--;
     }
 
     /**
@@ -167,60 +166,163 @@ export class Test {
     }
 
     /**
-     * Método que devuelve el número de visitas que ha tenido del test.
-     * @returns El número de visitas que ha tenido del test.
+     * Método que devuelve el ID del usuario creador del test.
+     * @returns El ID del usuario creador del test.
      */
-    getNumeroVisitas() {
-        return this.descripcion;
+    getIDUsuarioCreador() {
+        return this.id_usuario_creador;
     }
 
+    /**
+     * Método que devuelve el nombre del usuario creador del test.
+     * @returns El nombre del usuario creador del test.
+     */
+    getNombreUsuarioCreador() {
+        return this.nombre_usuario_creador;
+    }
 
+    /**
+     * Método que establece el id de la materia.
+     * @param {number} idMateria Especifica el ID de la materia a la que pertenece este test.
+     */
+    setIDMateria(idMateria) {
+        this.id_materia = idMateria;
+    }
+
+    /**
+     * Método que devuelve el id de la materia a la que pertenece este test.
+     * @returns El id de la materia a la que pertenece este test.
+     */
+    getIDMateria() {
+        return this.id_materia;
+    }
+
+    /**
+     * Método que establece el nombre de la materia.
+     * @param {number} idMateria Especifica el nombre de la materia a la que pertenece este test.
+     */
+    setNombreMateria(nombreMateria) {
+        this.nombre_materia = nombreMateria;
+    }
+
+    /**
+     * Método que devuelve el nombre de la materia a la que pertenece este test.
+     * @returns El nombre de la materia a la que pertenece este test.
+     */
+    getNombreMateria() {
+        return this.nombre_materia;
+    }
+
+    /**
+     * Método que devuelve el id del usuario que ha hecho/está haciendo el test.
+     * @returns El id del usuario que ha hecho/está haciendo el test.
+     */
+    getIDUsuario() {
+        return this.id_usuario;
+    }
+
+    /**
+     * Método que establece la nota que está sacando el usuario en el test.
+     * @param {number} idMateria Especifica la nota que está sacando el usuario en el test.
+     */
+    setNota(nombreMateria) {
+        this.nombre_materia = nombreMateria;
+    }
+
+    /**
+     * Método que devuelve la nota que está sacando el usuario en el test.
+     * @returns La nota que está sacando el usuario en el test.
+     */
+    getNota() {
+        return this.nota;
+    }
+
+    /**
+     * Método que establece la fecha de realización en la que el usuario ha hecho o está haciendo el test.
+     * @param {Date} fechaRealizacion Especifica lla fecha de realización en la que el usuario ha hecho o está haciendo el test.
+     */
+    setNota(fechaRealizacion) {
+        this.fecha_realizacion = fechaRealizacion;
+    }
+
+    /**
+     * Método que devuelve lla fecha de realización en la que el usuario ha hecho o está haciendo el test.
+     * @returns La fecha de realización en la que el usuario ha hecho o está haciendo el test.
+     */
+    getNota() {
+        return this.fecha_realizacion;
+    }
 
     /**
      * Descarga información acerca del test.
+     * - Nombre test
+     * - Descripcion
+     * - Numero visitas
+     * - Id usuario creador
+     * - Nombre usuario creador
+     * - Id materia
+     * - Nombre materia
      */
-    downloadInfoAboutTestByIdTest(id_usuario = null) {
-
+    downloadInfoAboutTestByIdTest() {
+        
     }
 
     /**
-     * Descarga del servidor las 10 siguientes preguntas (y sus respuestas).
+     * Método que descarga del servidor las 10 siguientes preguntas (y sus respuestas).
      * @throws {Error} Puede lanzar un error si no consigue descargar la información de las preguntas del servidor.
      */
     downloadQuestionsByIdTest() {
-        // irregular[0].tabla_preguntas[0]['Forma base']
+        // irregular[0].tabla_preguntas[0]['Forma base'] // Esta línea no sirve para nada, era solo una prueba, lo borraré
+
         /*-- Creación de un array de Tests --*/
-        let preguntas = Array(); // Aquí se almacenarán las preguntas del test que se recojan del servidor
+        // let preguntas = Array(); // Aquí se almacenarán las preguntas del test que se recojan del servidor
     
         /*-- Obtiene los datos del servidor --*/
         apij.obtenerJSON(globals.constantes.HOST_NAME + globals.constantes.RUTA_PREGUNTAS, "GET", null, {idTest: this.id_test, diezPreguntasHasta: 10})
         /* diezPreguntasHasta es un parámetro que se le pasa al servidor para indicarle que, por ejemplo, si estamos en viendo las preguntas del 1-10 y queremos ver las siguientes 10,
         se lo especificamos diciéndole que diezPreguntasHasta = 20, porque serían 10 preguntas desde la pregunta número 10 (que es la última visible en la página hasta el momento) */
         .then(response => {
-    
+            this.preguntas.push(response); // Revisar a ver si está bien o no cuando esté implementada la parte del lado del servidor
         }).catch(error => {
             /*-- Descarta que haya dado error --*/
             throw new Error("Se ha producido un error al intentar descargar la información de las preguntas del servidor. Mensaje de error: " + error.message);
         });
-        
-        
+
         /*-- Devuelve el resultado de la variable tests (el controlador se encargará de verificar si esto ha devuelto realmente la lista de tests o un error) --*/
-        return tests;
+        // return tests; // Esto ya no hace falta
+    }
+
+    /**
+     * Método que descarga del servidor (si existe) la información del usuario que ha realizado este intento del test.
+     * Es decir, descarga su nota, dado un id de usuario y una fecha de realización (si existen).
+     * @param {number} idUsuario Especifica el id del usuario que ha realizado el intento del test.
+     * @param {Date} fechaRealizacion Especifica la fecha en la que el usuario realizó el intento del test.
+     */
+    downloadInfoIntentoUsuario(idUsuario, fechaRealizacion) {
+        /*-- Descarta que el idUsuario no sea válido --*/
+        if (!idUsuario || typeof(idUsuario) != "number") {
+            return;
+        }
+
+        /*-- Descarta que la fechaRealizacion no sea válida --*/
+        if (!fechaRealizacion || typeof(fechaRealizacion) != "object" || fechaRealizacion instanceof Date == false) {
+            return;
+        }
+
+        /*-- Descarta que la info no exista en el servidor --*/
+        let nota = null;
+        // ... To do
+
+        /*-- Descarga la nota y establece los datos en el objeto Test --*/
+        this.id_usuario = idUsuario;
+        this.fecha_realizacion = fechaRealizacion;
+        this.nota = nota;
     }
 }
 
 /*==========================================
-        MÉTODOS ASOCIADOS AL MODELO
+        MÉTODOS ASOCIADOS AL MODELO (han de ser creados nuevos métodos en el próximo push para que concuerde con los nuevos tipos de preguntas que añadí en el último push)
 ===========================================*/
-
-/**
- * (Método implementado solo parcialmente).
- * @param {object} test (Obligatorio) Especifica un objeto test, por si hubiera simplemente que cargar más preguntas de un mismo test (en caso de que tuviera más de 10 preguntas, ya que de lo contrario, se cargan todas de una sola vez y no sería necesario invocar a este método).
- * @returns Devuelve el objeto test, con las nuevas preguntas cargadas.
- */
-function obtenerPreguntasTest(test = null) {
-    
-}
 
 /**
  * Función para crear un test random con múltiples respuestas, con el único fin de realizar pruebas mientras no se tenga implementada la parte del lado del servidor.
@@ -234,9 +336,18 @@ export function crearTestMultiplesRespuestasRandom(nPreguntas) {
     
     /*-- Creación de las preguntas random --*/
     for (let i = 0; i < nPreguntas; i++) {
-        preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta " + (i + 1), "respuestas":
-        respuestas,
-        "respuesta_correcta": respuestas[utilities.Random.randomInt(0, respuestas.length)]});
+        preguntas.push(
+            {
+                "id_pregunta": i + 1,
+                "id_test": utilities.Random.randomInt(),
+                "tipo_pregunta": TipoPregunta.MULTIPLE_RESPONSE, // Valdria tambien MULTIPLE_RESPONSE_MULTIPLE_CHOICE
+                "nombre_pregunta": "Formulación de la pregunta " + (i + 1),
+                "datos_pregunta": {
+                    "respuestas": respuestas,
+                    "respuesta_correcta": respuestas[utilities.Random.randomInt(0, respuestas.length)]
+                }
+            }
+        );
     }
 
     /*-- Creación del test --*/
@@ -259,8 +370,16 @@ export function crearTestRespuestaUnica(nPreguntas) {
     
     /*-- Creación de las preguntas random --*/
     for (let i = 0; i < nPreguntas; i++) {
-        preguntas.push({"id_pregunta": i + 1, "id_test": utilities.Random.randomInt(), "nombre_pregunta": "Formulación de la pregunta " + (i + 1),
-        "respuesta_correcta": palabras[utilities.Random.randomInt(0, palabras.length)]});
+        preguntas.push(
+            {
+                "id_pregunta": i + 1,
+                "id_test": utilities.Random.randomInt(),
+                "nombre_pregunta": "Formulación de la pregunta " + (i + 1),
+                datos_pregunta: {
+                    respuesta: palabras[utilities.Random.randomInt(0, palabras.length)]
+                }
+            }
+        );
     }
 
     /*-- Creación del test --*/
