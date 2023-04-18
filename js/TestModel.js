@@ -24,9 +24,9 @@ const TipoPregunta = {
 export class Test {
     /**
      * Constructor para crear un objeto de tipo test, que contendrá un test recogido de la BB.DD de la aplicación.
-     * @param {number} idTest Especifica el id del test en la BB.DD. Lo especificará el controlador, observando la "bandera" que dejaremos mediante PHP dentro del código fuente de la página web.
-     * @param {object} preguntas Objeto JSON que contiene las preguntas del test y respuestas a cada una de ellas, así como su respuesta correcta.
-     * @param {string} categoriaTest Especifica la categoría/materia a la que pertenece el test.
+     * @param {number} idTest (Opcional) Especifica el id del test en la BB.DD. Lo especificará el controlador, observando la "bandera" que dejaremos mediante PHP dentro del código fuente de la página web.
+     * @param {object} preguntas (Opcional) Objeto JSON que contiene las preguntas del test y respuestas a cada una de ellas, así como su respuesta correcta.
+     * @param {string} categoriaTest (Opcional) Especifica la categoría/materia a la que pertenece el test.
      * 
      */
     constructor(idTest = null, preguntas = null, categoriaTest = null) {
@@ -66,11 +66,6 @@ export class Test {
             this.length = preguntas.length;
         } else {
             this.length = 0;
-        }
-
-        /*-- Más atributos del test en sí --*/
-        if (nombreTest) {
-            this.nombre_test = nombreTest;
         }
     }
 
@@ -264,7 +259,14 @@ export class Test {
      * - Nombre materia
      */
     downloadInfoAboutTestByIdTest() {
-        
+        /*-- Obtiene los datos del servidor --*/
+        apij.obtenerJSON(globals.constantes.HOST_NAME + globals.constantes.RUTA_TESTS, "GET", null, {idTest: this.id_test, diezPreguntasHasta: 10})
+        .then(response => {
+            // ... To do
+        }).catch(error => {
+            /*-- Descarta que haya dado error --*/
+            throw new Error("Se ha producido un error al intentar descargar la información de las preguntas del servidor. Mensaje de error: " + error.message);
+        })
     }
 
     /**
@@ -359,7 +361,7 @@ export function crearTestMultiplesRespuestasRandom(nPreguntas) {
 
 /**
  * Función para crear un test random con una única respuesta posible, con el único fin de realizar pruebas mientras no se tenga implementada la parte del lado del servidor.
- * @param {number} nPreguntas Especifica el número de pregutnas que quieres que tenga el test random.
+ * @param {number} nPreguntas Especifica el número de preguntas que quieres que tenga el test random.
  * @returns Un test random de única respuesta posible (tiene que ser escrita).
  */
 export function crearTestRespuestaUnica(nPreguntas) {
@@ -377,6 +379,43 @@ export function crearTestRespuestaUnica(nPreguntas) {
                 "nombre_pregunta": "Formulación de la pregunta " + (i + 1),
                 datos_pregunta: {
                     respuesta: palabras[utilities.Random.randomInt(0, palabras.length)]
+                }
+            }
+        );
+    }
+
+    /*-- Creación del test --*/
+    test = new Test(utilities.Random.randomInt(1, 100), preguntas);
+
+    /*-- Devuelve el test creado --*/
+    return test;
+}
+
+/**
+ * Función para crear un test random de tipo rellenar huecos (gaps), con el único fin de realizar pruebas mientras no se tenga implementada la parte del lado del servidor.
+ * @param {number} nPreguntas Especifica el número de preguntas que quieres que tenga el test random.
+ * @returns Un test random de única respuesta posible (tiene que ser escrita).
+ */
+export function crearTestRellenarHuecos(nPreguntas) {
+    /*-- Creación de variables --*/
+    let test;
+    let preguntas = Array();
+    let palabras = ["perro", "gato", "casa", "coche", "jardín", "libro"];
+    
+    /*-- Creación de las preguntas random --*/
+    for (let i = 0; i < nPreguntas; i++) {
+        preguntas.push(
+            {
+                "id_pregunta": i + 1,
+                "id_test": utilities.Random.randomInt(),
+                "nombre_pregunta": "Formulación de la pregunta " + (i + 1),
+                datos_pregunta: {
+                    huecos: {
+                        "Hueco 1": palabras[utilities.Random.randomInt(0, palabras.length)],
+                        "Hueco 2": palabras[utilities.Random.randomInt(0, palabras.length)],
+                        "Hueco 3": palabras[utilities.Random.randomInt(0, palabras.length)],
+                        "Hueco 4": palabras[utilities.Random.randomInt(0, palabras.length)]
+                    }
                 }
             }
         );
