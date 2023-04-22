@@ -3,7 +3,7 @@
  =====================================*/
 import * as globals from './globals.json';
 // import * as irregular from './example_rellenar_huecos.json';
-import * as apij from './json.js';
+import * as apij from './JSON/json.js';
 import * as utilities from './utilidades.js';
 
 /*====================================
