@@ -1,1 +1,95 @@
-D:/Documentos/VSCode/AI/custom.css
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    box-sizing: border-box;
+}
+
+header > nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    box-sizing: border-box;
+}
+
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 992px;
+    margin: 1em auto;
+}
+
+.mensajeError {
+    background-color: lightsalmon;
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+}
+
+.mensajeExito {
+    background-color: lightgreen;
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+}
+
+#conversacion {
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+    margin-bottom: 13em;
+}
+
+#conversacion > div {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+}
+
+#conversacion > div > span {
+    float: left;
+    width: calc(80 * 0.07rem);
+    /* margin-right: 1em; */
+    font-weight: bold;
+}
+
+#conversacion > div > .message {
+    flex-grow: 1;
+}
+
+#conversacion > div > .message > p {
+    margin-top: 0;
+}
+
+#prompt {
+    background-color: lightblue;
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+    /* border-style: solid;
+    border-width: 1em;
+    border-color: white; */
+    
+    bottom: 0;
+    position: fixed;
+    width: calc(100% - 5em);
+    max-width: calc(992px - 4em);
+}
+
+#prompt textarea {
+    width: 100%;
+}
+
+#enviar {
+    text-align: end;
+}

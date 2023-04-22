@@ -1,1 +1,42 @@
-D:/Documentos/VSCode/AI/index.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My-ChatGPT</title>
+
+    <script src="./JSON/json.js"></script>
+    <script src="chat.js"></script>
+
+    <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <h1>My-ChatGPT</h1>
+                <div>
+                    <input type="file" id="importar_chat" value="Importar chat">
+                    <input type="button" id="exportar_chat" value="Exportar chat">
+                </div>
+            </nav>
+            <div id="estado"></div>
+        </header>
+        <main>
+            <section id="conversacion">
+                
+            </section>
+            <section id="prompt">
+                <textarea id="promptbox" placeholder="Escribe tu mensaje" rows="5"></textarea>
+                <div>
+                    <input type="checkbox" id="unlock_chatgpt" value="Unlock">
+                    <label for="unlock_chatgpt">Desbloquea todo el potencial de ChatGPT</label>
+                    <input type="button" id="enviar" value="Enviar">
+                    <input type="button" id="reset" value="Reiniciar conversación con ChatGPT">
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
