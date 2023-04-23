@@ -243,7 +243,7 @@ function fDeleteMessageButton(evento) {
     if (window.confirm("¿Estás seguro de eliminar el mensaje?")) {
         /*-- Obtiene acceso al div completo del mensaje --*/
         let message = this.parentElement.parentElement.parentElement;
-        let listaMensajes = Array.of(message.parentElement.children);
+        let listaMensajes = Array.from(message.parentElement.children);
 
         /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
         let indice = listaMensajes.indexOf(message);
@@ -261,20 +261,41 @@ function fDeleteMessageButton(evento) {
         }
 
         /*-- Guarda los cambios hechos en el array interno de mensajes en el localStorage --*/
-        localStorage.setItem("messages", JSON.stringify(mensajes.messages))
+        // localStorage.setItem("messages", JSON.stringify(mensajes.messages))
     }
 }
 
 function fEditMessageButton(evento) {
+    //https://plnkr.co/edit/llwF3t9dTxkRQtZf?p=preview&preview
     /*-- Obtiene acceso al div completo del mensaje --*/
-    let message = this.parentElement.parentElement.parentElement.querySelector(".message");
+    let cajaMessage = this.parentElement.parentElement.parentElement;
+    let listaMensajes = Array.from(cajaMessage.parentElement.children);
+    let message = cajaMessage.querySelector(".message");
+
+    /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
+    let indice = listaMensajes.indexOf(cajaMessage);
+
+    /*-- Crea el editor del mensaje --*/
     let editor = document.createElement("textarea");
-    // editor.value = message.
-
-
+    editor.style.height = (message.clientHeight - (message.children.length - 1) * 8) + "px";
+    // editor.rows = message.children.length;
+    editor.className = "message";
+    editor.addEventListener("blur", fMessageAreaEditorBlur); // Para controlar cuando abandone el foco, que se guarden los cambios
+    
+    /*-- Asigna el mensaje al editor: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
+    if (mensajes.messages[0].content == "You are a helpful assistant.") { // Cuando no está desbloqueado todo el potencial de ChatGPT
+        /*-- Asigna el mensaje al editor --*/
+        editor.value = mensajes.messages[indice + 1].content;
+    } else { // Cuando SÍ está desbloqueado todo el potencial de ChatGPT
+        /*-- Asigna el mensaje al editor --*/
+        editor.value = mensajes.messages[indice].content;
+    }
+    
+    /*-- Remplaza la caja del mensaje por el editor de texto creado --*/
+    message.replaceWith(editor);
 }
 
-function fMessageAreaEditorBlur() {
+function fMessageAreaEditorBlur(evento) {
 
 }
 

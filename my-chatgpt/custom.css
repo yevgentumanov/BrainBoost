@@ -83,7 +83,7 @@ textarea {
 
 #conversacion > div > .message {
     /* flex-grow: 1; */
-    width: auto;
+    width: 100%;
 }
 
 #conversacion > div > .message > p {
