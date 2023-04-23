@@ -1,4 +1,12 @@
-/*-- Creación de variables --*/
+/*===============================================
+                CONSTANTES
+===============================================*/
+const CHATGPT_API_URL = "https://openai80.p.rapidapi.com/chat/completions";
+const API_SUBSCRIBE_URL = "https://rapidapi.com/openai-api-openai-api-default/api/openai80";
+
+/*==============================================
+                VARIABLES
+===============================================*/
 let estado;
 let nuevosMensajes = 0; // Variable que servirá como bandera, sirve para controlar el numero nuevo de mensajes por procesar para poner en el HTML y en localStorage
 let promptbox;
@@ -37,17 +45,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*-- Presenta en la interfaz de usuario la conversación con ChatGPT --*/
     if (nuevosMensajes > 0) {
-        actualizarConversacion();
+        actualizarConversacionUI();
     }
 
+    /*-- Genera un aviso si el usuario no ha introducido su clave de RapidAPI de OpenAI --*/
     if (!localStorage.getItem("claveAPI")) {
         mensajeEstado(true,
             "Necesaria clave de API",
-            'Es necesario que ingreses una clave de API obtenida desde la página web <a href="https://rapidapi.com/openai-api-openai-api-default/api/openai80" target="_blank">RapidAPI</a>.');
+            `Es necesario que ingreses una clave de API obtenida desde la página web <a href="${API_SUBSCRIBE_URL}" target="_blank">RapidAPI</a>.`);
     }
 });
 
-function cargarConversacionJSON(jsonConversation) {
+function cargarConversacionJSON(jsonConversation = null) {
     if (jsonConversation) { // Si existe algo en localStorage... Lo carga
         mensajes.messages = jsonConversation;
     }
@@ -81,7 +90,55 @@ function mensajeEstado(error = false, titulo = null, message = null) {
     }
 }
 
-function actualizarConversacion() {
+function generarMensajeUI(mensaje) {
+    /*-- Crea la caja que contiene al mensaje --*/
+    let message = document.createElement("div");
+    message.className = "message";
+
+    /*-- Añade al ultimo mensaje los distintos párrafos que tenga el mensaje en cuestión --*/
+    let codigo = null;
+    let divididoPorParrafos = mensaje.content.split("\n");
+    divididoPorParrafos.forEach(parrafo => {
+        if (!codigo) {
+            /*-- Comprueba si empieza una pieza de código --*/
+            if (parrafo.startsWith("```", 0)) {
+                /*-- Crea una etiqueta div para el código --*/
+                codigo = document.createElement("div");
+                codigo.className = "codigo";
+            } else {
+                /*-- Crea el elemento p con el párrafo --*/
+                let p = document.createElement("p");
+                p.textContent = parrafo;
+
+                /*-- Añade el párrafo al mensaje --*/
+                message.append(p);
+            }
+        } else {
+            /*-- Descarta que no acabe la pieza de código --*/
+            if (parrafo.startsWith("```", 0)) {
+                /*-- Añade la pieza de código al mensaje --*/
+                message.append(codigo);
+
+                /*-- Elimina la referencia a la pieza de código para continuar escribiendo texto por pantalla --*/
+                codigo = null;
+            } else {
+                /*-- Escribe la línea de código --*/
+                let linea = document.createTextNode(parrafo);
+
+                /*-- Escribe un espacio en blanco con una etiqueta br --*/
+                let br = document.createElement("br");
+
+                /*-- Añade la línea y el salto de línea a la pieza de código --*/
+                codigo.append(linea, br);
+            }
+        }
+    });
+
+    /*-- Devuelve la caja con el mensaje generada --*/
+    return message;
+}
+
+function actualizarConversacionUI() {
     for (let i = mensajes.messages.length - nuevosMensajes; i < mensajes.messages.length; i++) {
         /*-- Variables con información del último mensaje del chat --*/
         let rol = mensajes.messages[i].role;
@@ -89,26 +146,32 @@ function actualizarConversacion() {
         /*-- Crea un nuevo div con el último mensaje --*/
         let ultimo = document.createElement("div");
         
+        /*-- Crea la etiqueta del autor del mensaje (system, assistant o user) --*/
         let nombreRol = document.createElement("span");
         nombreRol.textContent = rol;
-        ultimo.append(nombreRol);
+        
+        /*-- Crea los botones de editar y eliminar mensaje --*/
+        let botoneraSpan = document.createElement("div");
+        let deleteButton = document.createElement("img");
+        
+        deleteButton.className = "button delete";
+        deleteButton.src = "./trash.svg";
+        deleteButton.addEventListener("click", fDeleteMessageButton);
 
-        let message = document.createElement("div");
-        message.className = "message";
+        let editButton = document.createElement("img");
+        editButton.className = "button edit";
+        editButton.src = "./edit.svg";
+        editButton.addEventListener("click", fEditMessageButton);
 
-        /*-- Añade al ultimo mensaje los distintos párrafos que tenga el mensaje en cuestión --*/
-        let divididoPorParrafos = mensajes.messages[i].content.split("\n");
-        divididoPorParrafos.forEach(parrafo => {
-            /*-- Crea el elemento p con el párrafo --*/
-            let p = document.createElement("p");
-            p.textContent = parrafo;
+        botoneraSpan.append(editButton, deleteButton);
 
-            /*-- Añade el párrafo al mensaje --*/
-            message.append(p);
-        });
+        let message = generarMensajeUI(mensajes.messages[i]);
+
+        /*-- Añade los botones de edicion y eliminacion de mensaje a la etiqueta span --*/
+        nombreRol.append(botoneraSpan);
 
         /*-- Añade a la conversacion el último mensaje --*/
-        ultimo.append(message);
+        ultimo.append(nombreRol, message);
         conversacion.append(ultimo);
 
         /*-- Actualiza la lista de mensajes de localStorage --*/
@@ -120,6 +183,7 @@ function actualizarConversacion() {
     /*-- Hace scroll a la página hasta abajo --*/
     window.scrollTo(0, document.body.scrollHeight);
 }
+
 
 function fEnviarButton(evento) {
     // console.log(promptbox.value);
@@ -148,16 +212,16 @@ function fEnviarButton(evento) {
         mensajes.messages.push({"role":"user","content": promptbox.value});
     }
     nuevosMensajes++;
-    actualizarConversacion();
+    actualizarConversacionUI();
     promptbox.value = ""; // Vacía el textarea
-    
+
     /*-- Obtiene la respuesta de ChatGPT a nuestra petición --*/
-    obtenerJSON("https://openai80.p.rapidapi.com/chat/completions", "POST", headers, JSON.stringify(mensajes))
+    obtenerJSON(CHATGPT_API_URL, "POST", headers, JSON.stringify(mensajes))
         .then(response => {
             mensajes.messages.push({"role":"assistant","content": response.choices[0].message.content});
             nuevosMensajes++;
             console.log(response);
-            actualizarConversacion();
+            actualizarConversacionUI();
         })
         .catch(error => {
             console.error(error);
@@ -173,6 +237,45 @@ function fResetButton(evento) {
     unlock_chatgpt.disabled = false;
     unlock_chatgpt.checked = false;
     // console.dir(unlock_chatgpt);
+}
+
+function fDeleteMessageButton(evento) {
+    if (window.confirm("¿Estás seguro de eliminar el mensaje?")) {
+        /*-- Obtiene acceso al div completo del mensaje --*/
+        let message = this.parentElement.parentElement.parentElement;
+        let listaMensajes = Array.of(message.parentElement.children);
+
+        /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
+        let indice = listaMensajes.indexOf(message);
+
+        /*-- Borra el mensaje de la interfaz visual --*/
+        message.remove();
+
+        /*-- Borra el mensaje del array interno de mensajes: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
+        if (mensajes.messages[0].content == "You are a helpful assistant.") { // Cuando no está desbloqueado todo el potencial de ChatGPT
+            /*-- Borra el mensaje del array interno de mensajes --*/
+            mensajes.messages.splice(indice + 1, 1);
+        } else { // Cuando SÍ está desbloqueado todo el potencial de ChatGPT
+            /*-- Borra el mensaje del array interno de mensajes --*/
+            mensajes.messages.splice(indice, 1);
+        }
+
+        /*-- Guarda los cambios hechos en el array interno de mensajes en el localStorage --*/
+        localStorage.setItem("messages", JSON.stringify(mensajes.messages))
+    }
+}
+
+function fEditMessageButton(evento) {
+    /*-- Obtiene acceso al div completo del mensaje --*/
+    let message = this.parentElement.parentElement.parentElement.querySelector(".message");
+    let editor = document.createElement("textarea");
+    // editor.value = message.
+
+
+}
+
+function fMessageAreaEditorBlur() {
+
 }
 
 function fUnlockCheck(evento) {
@@ -195,12 +298,13 @@ function fImportarChatButton(evento) {
     reader.addEventListener("load", (event) => {
         const fileContent = event.target.result;
         const jsonContent = JSON.parse(fileContent);
+
         // Aquí puedes acceder al contenido del archivo JSON como un objeto JavaScript
         cargarConversacionJSON(jsonContent);
         conversacion.innerHTML = "";
         /*-- Presenta en la interfaz de usuario la conversación con ChatGPT --*/
         if (nuevosMensajes > 0) {
-            actualizarConversacion();
+            actualizarConversacionUI();
         }
     });
 

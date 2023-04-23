@@ -54,21 +54,46 @@ textarea {
     display: flex;
     flex-direction: row;
     align-items: start;
+    margin-bottom: 1em;
 }
 
 #conversacion > div > span {
-    float: left;
-    width: calc(80 * 0.07rem);
+    display: flex;
+    flex-direction: column;
+    /* float: left; */
+    /* width: calc(80 * 0.07rem); */
+    min-width: 100px;
+    /* flex-grow: 1; */
     /* margin-right: 1em; */
     font-weight: bold;
 }
 
+#conversacion > div > span > div > img.button {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+#conversacion > div > span > div > img.button:hover {
+    background-color: #eee;
+}
+#conversacion > div > span > div > img.button:active {
+    background-color: #aaa;
+}
+
 #conversacion > div > .message {
-    flex-grow: 1;
+    /* flex-grow: 1; */
+    width: auto;
 }
 
 #conversacion > div > .message > p {
     margin-top: 0;
+}
+
+#conversacion > div > .message > .codigo {
+    background-color: #eee;
+    border-radius: 0.5em;
+    padding: 1em;
 }
 
 #prompt {
