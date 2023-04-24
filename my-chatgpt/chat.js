@@ -3,6 +3,8 @@
 ===============================================*/
 const CHATGPT_API_URL = "https://openai80.p.rapidapi.com/chat/completions";
 const API_SUBSCRIBE_URL = "https://rapidapi.com/openai-api-openai-api-default/api/openai80";
+const DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant.";
+const USER_TYPES = ["system", "user", "assistant"]
 
 /*==============================================
                 VARIABLES
@@ -14,10 +16,11 @@ let conversacion; // Variable que almacena el section que contiene todos los div
 let unlock_chatgpt;
 let importar_chat; // Boton importar chat
 let exportar_chat; // Boton exportar chat
+
 let mensajes = {
     "model":"gpt-3.5-turbo",
     "messages":[
-        {"role":"system","content":"You are a helpful assistant."}
+        {"role": USER_TYPES[0], "content": DEFAULT_SYSTEM_MESSAGE}
     ]
 };
 
@@ -60,7 +63,7 @@ function cargarConversacionJSON(jsonConversation = null) {
     if (jsonConversation) { // Si existe algo en localStorage... Lo carga
         mensajes.messages = jsonConversation;
     }
-    if (mensajes.messages[0].content == "You are a helpful assistant.") { // Cuando no está desbloqueado todo el potencial de ChatGPT
+    if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
         nuevosMensajes = mensajes.messages.length - 1;
     } else { // Cuando SÍ está desbloqueado todo el potencial de ChatGPT
         nuevosMensajes = mensajes.messages.length;
@@ -184,7 +187,6 @@ function actualizarConversacionUI() {
     window.scrollTo(0, document.body.scrollHeight);
 }
 
-
 function fEnviarButton(evento) {
     // console.log(promptbox.value);
     /*-- Descarta que no hay una clave API para poder interactuar con ChatGPT --*/
@@ -207,9 +209,9 @@ function fEnviarButton(evento) {
 
     /*-- Especifica el mensaje a la lista de mensajes del ChatGPT --*/
     if (mensajes.messages.length == 0) {
-        mensajes.messages.push({"role":"system","content": promptbox.value});
+        mensajes.messages.push({"role":USER_TYPES[0],"content": promptbox.value});
     } else {
-        mensajes.messages.push({"role":"user","content": promptbox.value});
+        mensajes.messages.push({"role":USER_TYPES[1],"content": promptbox.value});
     }
     nuevosMensajes++;
     actualizarConversacionUI();
@@ -218,7 +220,7 @@ function fEnviarButton(evento) {
     /*-- Obtiene la respuesta de ChatGPT a nuestra petición --*/
     obtenerJSON(CHATGPT_API_URL, "POST", headers, JSON.stringify(mensajes))
         .then(response => {
-            mensajes.messages.push({"role":"assistant","content": response.choices[0].message.content});
+            mensajes.messages.push({"role":USER_TYPES[2],"content": response.choices[0].message.content});
             nuevosMensajes++;
             console.log(response);
             actualizarConversacionUI();
@@ -232,7 +234,7 @@ function fResetButton(evento) {
     conversacion.innerHTML = ""; // Borra todos los mensajes de la interfaz visualk
     /*-- Borra los mensajes de la memoria interna --*/
     mensajes.messages = [
-        {"role":"system","content":"You are a helpful assistant."}
+        {"role":USER_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
     ];
     unlock_chatgpt.disabled = false;
     unlock_chatgpt.checked = false;
@@ -252,7 +254,7 @@ function fDeleteMessageButton(evento) {
         message.remove();
 
         /*-- Borra el mensaje del array interno de mensajes: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
-        if (mensajes.messages[0].content == "You are a helpful assistant.") { // Cuando no está desbloqueado todo el potencial de ChatGPT
+        if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
             /*-- Borra el mensaje del array interno de mensajes --*/
             mensajes.messages.splice(indice + 1, 1);
         } else { // Cuando SÍ está desbloqueado todo el potencial de ChatGPT
@@ -272,6 +274,8 @@ function fEditMessageButton(evento) {
     let listaMensajes = Array.from(cajaMessage.parentElement.children);
     let message = cajaMessage.querySelector(".message");
 
+    /*-- Obtiene acceso al
+
     /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
     let indice = listaMensajes.indexOf(cajaMessage);
 
@@ -283,7 +287,7 @@ function fEditMessageButton(evento) {
     editor.addEventListener("blur", fMessageAreaEditorBlur); // Para controlar cuando abandone el foco, que se guarden los cambios
     
     /*-- Asigna el mensaje al editor: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
-    if (mensajes.messages[0].content == "You are a helpful assistant.") { // Cuando no está desbloqueado todo el potencial de ChatGPT
+    if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
         /*-- Asigna el mensaje al editor --*/
         editor.value = mensajes.messages[indice + 1].content;
     } else { // Cuando SÍ está desbloqueado todo el potencial de ChatGPT
@@ -304,7 +308,7 @@ function fUnlockCheck(evento) {
         mensajes.messages = [];
     } else {
         mensajes.messages = [
-            {"role":"system","content":"You are a helpful assistant."}
+            {"role":USER_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
         ];
     }
 }
