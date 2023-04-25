@@ -4,7 +4,7 @@
 const CHATGPT_API_URL = "https://openai80.p.rapidapi.com/chat/completions";
 const API_SUBSCRIBE_URL = "https://rapidapi.com/openai-api-openai-api-default/api/openai80";
 const DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant.";
-const USER_TYPES = ["system", "user", "assistant"]
+const ROLE_TYPES = ["system", "user", "assistant"]
 
 /*==============================================
                 VARIABLES
@@ -20,7 +20,7 @@ let exportar_chat; // Boton exportar chat
 let mensajes = {
     "model":"gpt-3.5-turbo",
     "messages":[
-        {"role": USER_TYPES[0], "content": DEFAULT_SYSTEM_MESSAGE}
+        {"role": ROLE_TYPES[0], "content": DEFAULT_SYSTEM_MESSAGE}
     ]
 };
 
@@ -93,6 +93,34 @@ function mensajeEstado(error = false, titulo = null, message = null) {
     }
 }
 
+function generarEtiquetaUserYBotonesUI(rol) {
+    /*-- Crea la etiqueta del autor del mensaje (system, assistant o user) --*/
+    let nombreRol = document.createElement("span");
+    nombreRol.textContent = rol;
+    
+    /*-- Crea los botones de editar y eliminar mensaje --*/
+    let botoneraSpan = document.createElement("div");
+    let deleteButton = document.createElement("img");
+    
+    deleteButton.className = "button delete";
+    deleteButton.src = "./trash.svg";
+    deleteButton.addEventListener("click", fDeleteMessageButton);
+
+    let editButton = document.createElement("img");
+    editButton.className = "button edit";
+    editButton.src = "./edit.svg";
+    editButton.addEventListener("click", fEditMessageButton);
+
+    /*-- Añade los botones al div de la botonera --*/
+    botoneraSpan.append(editButton, deleteButton);
+
+    /*-- Añade la botonera la etiqueta span --*/
+    nombreRol.append(botoneraSpan);
+
+    /*-- Devuelve la etiqueta del autor --*/
+    return nombreRol;
+}
+
 function generarMensajeUI(mensaje) {
     /*-- Crea la caja que contiene al mensaje --*/
     let message = document.createElement("div");
@@ -148,30 +176,12 @@ function actualizarConversacionUI() {
 
         /*-- Crea un nuevo div con el último mensaje --*/
         let ultimo = document.createElement("div");
-        
-        /*-- Crea la etiqueta del autor del mensaje (system, assistant o user) --*/
-        let nombreRol = document.createElement("span");
-        nombreRol.textContent = rol;
-        
-        /*-- Crea los botones de editar y eliminar mensaje --*/
-        let botoneraSpan = document.createElement("div");
-        let deleteButton = document.createElement("img");
-        
-        deleteButton.className = "button delete";
-        deleteButton.src = "./trash.svg";
-        deleteButton.addEventListener("click", fDeleteMessageButton);
 
-        let editButton = document.createElement("img");
-        editButton.className = "button edit";
-        editButton.src = "./edit.svg";
-        editButton.addEventListener("click", fEditMessageButton);
+        /*-- Crea la etiqueta del usuario y la botonera UI --*/
+        let nombreRol = generarEtiquetaUserYBotonesUI(rol);
 
-        botoneraSpan.append(editButton, deleteButton);
-
+        /*-- Crea el mensaje UI --*/
         let message = generarMensajeUI(mensajes.messages[i]);
-
-        /*-- Añade los botones de edicion y eliminacion de mensaje a la etiqueta span --*/
-        nombreRol.append(botoneraSpan);
 
         /*-- Añade a la conversacion el último mensaje --*/
         ultimo.append(nombreRol, message);
@@ -209,9 +219,9 @@ function fEnviarButton(evento) {
 
     /*-- Especifica el mensaje a la lista de mensajes del ChatGPT --*/
     if (mensajes.messages.length == 0) {
-        mensajes.messages.push({"role":USER_TYPES[0],"content": promptbox.value});
+        mensajes.messages.push({"role":ROLE_TYPES[0],"content": promptbox.value});
     } else {
-        mensajes.messages.push({"role":USER_TYPES[1],"content": promptbox.value});
+        mensajes.messages.push({"role":ROLE_TYPES[1],"content": promptbox.value});
     }
     nuevosMensajes++;
     actualizarConversacionUI();
@@ -220,7 +230,7 @@ function fEnviarButton(evento) {
     /*-- Obtiene la respuesta de ChatGPT a nuestra petición --*/
     obtenerJSON(CHATGPT_API_URL, "POST", headers, JSON.stringify(mensajes))
         .then(response => {
-            mensajes.messages.push({"role":USER_TYPES[2],"content": response.choices[0].message.content});
+            mensajes.messages.push({"role":ROLE_TYPES[2],"content": response.choices[0].message.content});
             nuevosMensajes++;
             console.log(response);
             actualizarConversacionUI();
@@ -234,7 +244,7 @@ function fResetButton(evento) {
     conversacion.innerHTML = ""; // Borra todos los mensajes de la interfaz visualk
     /*-- Borra los mensajes de la memoria interna --*/
     mensajes.messages = [
-        {"role":USER_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
+        {"role":ROLE_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
     ];
     unlock_chatgpt.disabled = false;
     unlock_chatgpt.checked = false;
@@ -244,14 +254,14 @@ function fResetButton(evento) {
 function fDeleteMessageButton(evento) {
     if (window.confirm("¿Estás seguro de eliminar el mensaje?")) {
         /*-- Obtiene acceso al div completo del mensaje --*/
-        let message = this.parentElement.parentElement.parentElement;
-        let listaMensajes = Array.from(message.parentElement.children);
+        let cajaMessage = this.parentElement.parentElement.parentElement;
+        let listaMensajes = Array.from(cajaMessage.parentElement.children);
 
         /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
-        let indice = listaMensajes.indexOf(message);
+        let indice = listaMensajes.indexOf(cajaMessage);
 
         /*-- Borra el mensaje de la interfaz visual --*/
-        message.remove();
+        cajaMessage.remove();
 
         /*-- Borra el mensaje del array interno de mensajes: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
         if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
@@ -274,8 +284,6 @@ function fEditMessageButton(evento) {
     let listaMensajes = Array.from(cajaMessage.parentElement.children);
     let message = cajaMessage.querySelector(".message");
 
-    /*-- Obtiene acceso al
-
     /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
     let indice = listaMensajes.indexOf(cajaMessage);
 
@@ -284,7 +292,7 @@ function fEditMessageButton(evento) {
     editor.style.height = (message.clientHeight - (message.children.length - 1) * 8) + "px";
     // editor.rows = message.children.length;
     editor.className = "message";
-    editor.addEventListener("blur", fMessageAreaEditorBlur); // Para controlar cuando abandone el foco, que se guarden los cambios
+    // editor.addEventListener("blur", fMessageAreaEditorBlur); // Para controlar cuando abandone el foco, que se guarden los cambios
     
     /*-- Asigna el mensaje al editor: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
     if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
@@ -294,12 +302,69 @@ function fEditMessageButton(evento) {
         /*-- Asigna el mensaje al editor --*/
         editor.value = mensajes.messages[indice].content;
     }
+
+    /*-- Obtiene acceso al span de la etiqueta de usuario y botonera --*/
+    let etiquetaUsuario = cajaMessage.children[0];
     
+    /*-- Crea un select --*/
+    let selectorRole = document.createElement("select");
+    for (let i = 0; i < ROLE_TYPES.length; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = ROLE_TYPES[i];
+        selectorRole.options.add(option); // Agrega la opción al desplegable
+
+        /*-- Si es que lo fuera, carga el rol actual para marcarlo como el rol por defecto en el desplegable --*/
+        if (etiquetaUsuario.textContent == ROLE_TYPES[i]) {
+            selectorRole.selectedIndex = i;
+        }
+    }
+
+    /*-- Crea la botonera --*/
+    let botoneraSpan = document.createElement("div");
+    let saveButton = document.createElement("img");
+    
+    saveButton.className = "button save";
+    saveButton.src = "./save.svg";
+    saveButton.addEventListener("click", fSaveChangesMessageButton);
+
+    let discardButton = document.createElement("img");
+    discardButton.className = "button edit";
+    discardButton.src = "./discard.svg";
+    discardButton.addEventListener("click", fDiscardChangesMessageButton);
+
+    /*-- Añade los botones al div de la botonera --*/
+    botoneraSpan.append(discardButton, saveButton);
+
+    /*========================================================
+            REALIZA LOS CAMBIOS EN LA INTERFAZ VISUAL
+    ==========================================================*/
+
+    /*-- Agrega los elementos de la interfaz creados al span de la etiquetaUsuario --*/
+    etiquetaUsuario.innerHTML = "";
+    etiquetaUsuario.append(selectorRole, botoneraSpan);
+
     /*-- Remplaza la caja del mensaje por el editor de texto creado --*/
     message.replaceWith(editor);
 }
 
-function fMessageAreaEditorBlur(evento) {
+function fDiscardChangesMessageButton(evento) {
+    /*-- Obtiene acceso al div completo del mensaje --*/
+    let cajaMessage = this.parentElement.parentElement.parentElement;
+
+    /*-- Obtiene acceso a los dos elementos de la caja del mensaje para poder sustituirlos --*/
+    let etiquetaUsuario = cajaMessage.children[0];
+    let message = cajaMessage.children[1];
+    let selectorRole = 
+
+    /*-- Sustituye los componentes por los originales --*/
+    etiquetaUsuario.replaceWith(
+        generarEtiquetaUserYBotonesUI(),
+        );
+
+}
+
+function fSaveChangesMessageButton(evento) {
 
 }
 
@@ -308,7 +373,7 @@ function fUnlockCheck(evento) {
         mensajes.messages = [];
     } else {
         mensajes.messages = [
-            {"role":USER_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
+            {"role":ROLE_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
         ];
     }
 }
