@@ -128,7 +128,7 @@ function generarMensajeUI(mensaje) {
 
     /*-- Añade al ultimo mensaje los distintos párrafos que tenga el mensaje en cuestión --*/
     let codigo = null;
-    let divididoPorParrafos = mensaje.content.split("\n");
+    let divididoPorParrafos = mensaje.split("\n");
     divididoPorParrafos.forEach(parrafo => {
         if (!codigo) {
             /*-- Comprueba si empieza una pieza de código --*/
@@ -181,7 +181,7 @@ function actualizarConversacionUI() {
         let nombreRol = generarEtiquetaUserYBotonesUI(rol);
 
         /*-- Crea el mensaje UI --*/
-        let message = generarMensajeUI(mensajes.messages[i]);
+        let message = generarMensajeUI(mensajes.messages[i].content);
 
         /*-- Añade a la conversacion el último mensaje --*/
         ultimo.append(nombreRol, message);
@@ -217,7 +217,7 @@ function fEnviarButton(evento) {
 		'X-RapidAPI-Host': 'openai80.p.rapidapi.com'
 	};
 
-    /*-- Especifica el mensaje a la lista de mensajes del ChatGPT --*/
+    /*-- Especifica el mensaje a la lista interna de mensajes del ChatGPT --*/
     if (mensajes.messages.length == 0) {
         mensajes.messages.push({"role":ROLE_TYPES[0],"content": promptbox.value});
     } else {
@@ -241,7 +241,7 @@ function fEnviarButton(evento) {
 }
 
 function fResetButton(evento) {
-    conversacion.innerHTML = ""; // Borra todos los mensajes de la interfaz visualk
+    conversacion.innerHTML = ""; // Borra todos los mensajes de la interfaz visual
     /*-- Borra los mensajes de la memoria interna --*/
     mensajes.messages = [
         {"role":ROLE_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
@@ -255,6 +255,8 @@ function fDeleteMessageButton(evento) {
     if (window.confirm("¿Estás seguro de eliminar el mensaje?")) {
         /*-- Obtiene acceso al div completo del mensaje --*/
         let cajaMessage = this.parentElement.parentElement.parentElement;
+
+        /*-- Obtiene acceso a la lista completa de mensajes en la UI --*/
         let listaMensajes = Array.from(cajaMessage.parentElement.children);
 
         /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
@@ -281,11 +283,14 @@ function fEditMessageButton(evento) {
     //https://plnkr.co/edit/llwF3t9dTxkRQtZf?p=preview&preview
     /*-- Obtiene acceso al div completo del mensaje --*/
     let cajaMessage = this.parentElement.parentElement.parentElement;
-    let listaMensajes = Array.from(cajaMessage.parentElement.children);
     let message = cajaMessage.querySelector(".message");
 
-    /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
-    let indice = listaMensajes.indexOf(cajaMessage);
+    /*-- Obtiene acceso a la lista completa de mensajes en la UI --*/
+    let listaMensajes = Array.from(cajaMessage.parentElement.children);
+    
+    /*-- Obtiene el índice del mensaje dentro de la memoria interna y dentro de la interfaz visual --*/
+    let indiceInterno = listaMensajes.indexOf(cajaMessage);
+    let indiceVisual = indiceInterno; // Por si se necesita (en este caso no)
 
     /*-- Crea el editor del mensaje --*/
     let editor = document.createElement("textarea");
@@ -294,14 +299,13 @@ function fEditMessageButton(evento) {
     editor.className = "message";
     // editor.addEventListener("blur", fMessageAreaEditorBlur); // Para controlar cuando abandone el foco, que se guarden los cambios
     
-    /*-- Asigna el mensaje al editor: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
+    /*-- Asegura si indice interfaz visual == indice array interno, para no cometer fallos --*/
     if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
-        /*-- Asigna el mensaje al editor --*/
-        editor.value = mensajes.messages[indice + 1].content;
-    } else { // Cuando SÍ está desbloqueado todo el potencial de ChatGPT
-        /*-- Asigna el mensaje al editor --*/
-        editor.value = mensajes.messages[indice].content;
+        indiceInterno = indiceInterno + 1;
     }
+
+    /*-- Asigna el mensaje al editor --*/
+    editor.value = mensajes.messages[indiceInterno].content;
 
     /*-- Obtiene acceso al span de la etiqueta de usuario y botonera --*/
     let etiquetaUsuario = cajaMessage.children[0];
@@ -315,7 +319,7 @@ function fEditMessageButton(evento) {
         selectorRole.options.add(option); // Agrega la opción al desplegable
 
         /*-- Si es que lo fuera, carga el rol actual para marcarlo como el rol por defecto en el desplegable --*/
-        if (etiquetaUsuario.textContent == ROLE_TYPES[i]) {
+        if (mensajes.messages[indiceInterno].role == ROLE_TYPES[i]) {
             selectorRole.selectedIndex = i;
         }
     }
@@ -352,20 +356,58 @@ function fDiscardChangesMessageButton(evento) {
     /*-- Obtiene acceso al div completo del mensaje --*/
     let cajaMessage = this.parentElement.parentElement.parentElement;
 
+    /*-- Obtiene acceso a la lista completa de mensajes en la UI --*/
+    let listaMensajes = Array.from(cajaMessage.parentElement.children);
+
+    /*-- Obtiene el índice del mensaje dentro de la memoria interna y dentro de la interfaz visual --*/
+    let indiceInterno = listaMensajes.indexOf(cajaMessage);
+    let indiceVisual = indiceInterno; // Por si se necesita (en este caso no)
+
     /*-- Obtiene acceso a los dos elementos de la caja del mensaje para poder sustituirlos --*/
     let etiquetaUsuario = cajaMessage.children[0];
-    let message = cajaMessage.children[1];
-    let selectorRole = 
+    let promptBox = cajaMessage.children[1];
 
     /*-- Sustituye los componentes por los originales --*/
     etiquetaUsuario.replaceWith(
-        generarEtiquetaUserYBotonesUI(),
+            generarEtiquetaUserYBotonesUI(mensajes.messages[indiceInterno].role)
         );
-
+    promptBox.replaceWith(
+            generarMensajeUI(mensajes.messages[indiceInterno].content)
+        );
 }
 
 function fSaveChangesMessageButton(evento) {
+    /*-- Obtiene acceso al div completo del mensaje --*/
+    let cajaMessage = this.parentElement.parentElement.parentElement;
 
+    /*-- Obtiene acceso a la lista completa de mensajes en la UI --*/
+    let listaMensajes = Array.from(cajaMessage.parentElement.children);
+
+    /*-- Obtiene el índice del mensaje dentro de la memoria interna y dentro de la interfaz visual --*/
+    let indiceInterno = listaMensajes.indexOf(cajaMessage);
+    let indiceVisual = indiceInterno; // Por si se necesita (en este caso no)
+
+    /*-- Obtiene acceso a los dos elementos de la caja del mensaje para poder sustituirlos --*/
+    let etiquetaUsuario = cajaMessage.children[0];
+    let promptBox = cajaMessage.children[1];
+    let selectorRole = etiquetaUsuario.children[0];
+
+    /*-- Sustituye los componentes UI por los originales, con los nuevos datos --*/
+    etiquetaUsuario.replaceWith(
+            generarEtiquetaUserYBotonesUI(ROLE_TYPES[selectorRole.value])
+        );
+    promptBox.replaceWith(
+            generarMensajeUI(promptBox.value)
+        );
+
+    /*===========================================================================
+            Sustituye los datos en la memoria interna y en localStorage
+    ============================================================================*/
+    /*-- Especifica el mensaje a la lista interna de mensajes del ChatGPT --*/
+    mensajes.messages[indiceInterno] = {"role":ROLE_TYPES[selectorRole.value],"content": promptBox.value};
+
+    /*-- Actualiza la lista de mensajes de localStorage --*/
+    localStorage.setItem("messages", JSON.stringify(mensajes.messages));
 }
 
 function fUnlockCheck(evento) {
