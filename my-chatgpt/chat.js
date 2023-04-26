@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     importar_chat.addEventListener("change", fImportarChatButton);
     exportar_chat.addEventListener("click", fExportarChatButton);
 
+    /*-- Modificaciones iniciales de algunos elementos --*/
+    importar_chat.setAttribute("capture", "Importar archivo")
+
     /*-- Recupera la última conversación de localStorage --*/
     let messages = JSON.parse(localStorage.getItem("messages"));
     cargarConversacionJSON(messages);
@@ -439,6 +442,8 @@ function fImportarChatButton(evento) {
             actualizarConversacionUI();
         }
     });
+    
+    this.value = "";
 
 }
 
