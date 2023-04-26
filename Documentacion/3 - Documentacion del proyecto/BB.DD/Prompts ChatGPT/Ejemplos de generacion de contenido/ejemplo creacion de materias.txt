@@ -1,0 +1,7 @@
+INSERT INTO Materias (cod_materia, nombre_materia)
+VALUES ('CINC001', 'Ciencias Naturales'),
+       ('LENG002', 'Lengua y literatura'),
+       ('HIST003', 'Historia de España'),
+       ('QUIM004', 'Química'),
+       ('FISI005', 'Física'),
+       ('MATE006', 'Matemáticas');

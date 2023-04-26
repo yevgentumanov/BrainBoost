@@ -1,0 +1,10 @@
+-- Obtener el id_materia de la tabla "Materias" para la materia de Ciencias Naturales
+SELECT id_materia FROM Materias WHERE nombre_materia = 'Ciencias Naturales';
+
+-- Insertar las 5 preguntas en la tabla "Preguntas y respuestas"
+INSERT INTO `Preguntas y respuestas` (`id_pregunta`, `id_test`, `nombre_pregunta`, `respuestas`) VALUES
+(1, 1, '¿Qué es el ADN?', '{"respuestas":["El material genético que se encuentra en el núcleo de las células","Una proteína esencial en la digestión","Un lípido que forma parte de las membranas celulares","Un carbohidrato complejo que se encuentra en los vegetales"],"respuesta_correcta":"El material genético que se encuentra en el núcleo de las células"}'),
+(2, 1, '¿Cuál es la función principal del corazón?', '{"respuestas":["Producir orina","Facilitar la respiración","Bombeo de sangre por todo el cuerpo","Regular la temperatura corporal"],"respuesta_correcta":"Bombeo de sangre por todo el cuerpo"}'),
+(3, 1, '¿Cuál de las siguientes no es una propiedad del agua?', '{"respuestas":["Capilaridad","Densidad","Atracción gravitacional","Inflamabilidad"],"respuesta_correcta":"Inflamabilidad"}'),
+(4, 1, '¿Cuál es la principal función de la clorofila en las plantas?', '{"respuestas":["Producir frutos","Captar la energía solar para la fotosíntesis","Facilitar el transporte de nutrientes","Regular la temperatura corporal"],"respuesta_correcta":"Captar la energía solar para la fotosíntesis"}'),
+(5, 1, '¿Qué órgano produce la insulina?', '{"respuestas":["El hígado","Los riñones","El páncreas","El corazón"],"respuesta_correcta":"El páncreas"}');

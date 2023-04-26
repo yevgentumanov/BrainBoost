@@ -1,0 +1,15 @@
+De acuerdo, he creado una tabla en la BB.DD llamada "Preguntas y respuestas" con los siguientes campos:
+- id_pregunta (NUMBER, Primary Key)
+- id_test (NUMBER, Foreign Key de la tabla "Tests")
+- nombre_pregunta (VARCHAR)
+- respuestas (JSON, que contenga las respuestas posibles y la respuesta correcta)
+
+Tengo otra tabla llamada "Tests" con los siguientes campos:
+- id_test (NUMBER, Primary Key)
+- id_materia (NUMBER, Foreign Key de la tabla "Materias")
+
+Tengo otra tabla llamada "Materias" con los siguientes campos:
+- id_materia (NUMBER, Primary Key)
+- nombre_materia (VARCHAR)
+
+Quiero que me generes un test nuevo, con 5 preguntas en la tabla "Preguntas y respuestas" sobre la materia de Ciencias Naturales, y quiero que tenga 4 respuestas posibles por pregunta. Quiero que me lo muestres en código MySQL

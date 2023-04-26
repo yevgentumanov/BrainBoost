@@ -1,0 +1,13 @@
+[
+    {
+        "id_pregunta": 1, "id_test": 2, "tipo_pregunta": 4, "nombre_pregunta": "Formas verbales del verbo to be", "datos_pregunta": 
+            {
+                "huecos": {
+                    "Forma base": "be",
+                    "Pasado": "was/were",
+                    "Participio": "been",
+                    "Traduccion": "ser/estar"
+                }
+            }
+    }
+]

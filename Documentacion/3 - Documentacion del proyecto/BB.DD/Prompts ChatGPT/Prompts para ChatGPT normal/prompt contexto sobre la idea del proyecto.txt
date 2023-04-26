@@ -1,0 +1,62 @@
+Quiero que actúes como mi profesor de informática
+
+¡Por supuesto! Estoy aquí para ayudarte con cualquier pregunta que tengas sobre informática. ¿En qué puedo ayudarte?
+
+Idea de aplicación web para proyecto de fin de ciclo formativo de Desarrollo de Aplicaciones Web:
+
+El objetivo de la aplicación es ayudar a los estudiantes de la generación Z y alfa a memorizar cosas, hacerles más ameno el aprendizaje, con un enfoque divertido y entretenido, a la vez que productivo y eficaz.
+Por su puesto es extrapolable a otras generaciones, todo el mundo podría utilizar la aplicación, pero el principal público target y por el que hago esta aplicación y para el cual, analizo su comportamiento de estudio, es por esas generaciones, que se distraen con mucha facilidad y les resulta muy difícil memorizar cosas.
+
+Habrá varios tipos de test:
+- Test de relacionar concepto con definición (serian conceptos y definiciones cortas, sería como el más polivalente para cualquier materia en la que se quisiera utilizar esta aplicación, ya que, podría usarse también en ciclos formativos y universidad). 
+- Test de fórmulas matemáticas (también podría servir para resolver ecuaciones), formulación, preguntas de verbos irregulares, preguntas sobre vocabulario en idiomas (inglés, francés...), etc.
+
+Puede haber distintos niveles de dificultad:
+- Nivel fácil: eliges que quieres que te pregunte la aplicación: el concepto o la definición.
+- Nivel difícil: la app elige lo que preguntarte, el concepto o la definición, de forma aleatoria en cada pregunta.
+
+¿Cómo se estudiaría con esta aplicación?:
+Pues bien, eliges un test, y tienes 3 opciones:
+- Ver las preguntas y respuestas que contiene, para poder estudiártelas.
+- Modo práctica.
+- Modo desafío.
+Tanto el modo práctica como el modo desafío, se basan en un sistema de preguntas y respuestas almacenadas en la BB.DD que se formularán en orden aleatorio, en el que por cada pregunta acertada, sumas un porcentaje en una barra de progreso. Los fallos no restan, el objetivo no es plantearlo como un examen, sino como un “juego” para hacer del aprendizaje algo mucho más entretenido, e incluso por qué no, competitivo.
+Cabe mencionar que habría una característica para responder a las preguntas por voz (mediante dictado por voz), ya que se supone que esta app (aunque sea web), será principalmente usada desde móvil, ya que los jóvenes de hoy en día todo lo hacen desde el móvil.
+
+Modo práctica:
+Para el modo práctica, se plantean preguntas, y el usuario las va respondiendo. Si falla una pregunta, se le repite la misma pregunta, hasta que dé con la respuesta correcta. En función de cuanto se acerque a la solución (cuantos caracteres coincidan con la solución real), la caja de texto sobre la que se escribirá, cambiará el color de su borde (rojo, naranja, amarillo y verde), a modo de "texto predictivo". Así hasta llegar al 100%. El usuario podrá repetir cuantas veces quiera el test en el modo práctica para poder enfrentarse al modo desafío con una mayor soltura. 
+El objetivo es que, solo con este “modo práctica” en nivel difícil, para la mayoría de los casos, aumente bastante las probabilidades de aprobar el examen por el que los estudiantes han decidido estudiar con esta aplicación.
+
+Modo desafío:
+Para el modo desafío, se plantean preguntas, también en orden aleatorio, con la diferencia de que si el usuario acierta las preguntas, va avanzando en porcentaje de progreso en el test, pero si falla... Game over, empiezas de nuevo. Este sería el modo perfecto para perfeccionar y mejorar en tu memoria los contenidos que tienes que aprender. Con este modo, la aplicación garantiza que el estudiante saque muy buena nota en su examen, si no un 10.
+De manera opcional, podría plantear este modo como un modo competitivo, y podría haber un ranking (esta idea no se si sería buena, pero bueno, yo la apunto por si acaso) de cuántas personas han logrado el 100% en el test, cuantos intentos les ha llevado conseguirlo.
+
+Creación de tests:
+Los usuarios de la aplicación podrían crear sus tests y compartirlos con amigos dentro de la misma... 
+Esta opción de creación de test, también está pensada para involucrar también a profesores, así podría llamar más la atención y hacerse popular más rápido en la comunidad educativa.
+
+Opiniones:
+¿Qué te parece la idea?
+A mí me parece que es buenísima, me habría gustado tener algo así cuando yo estudiaba en el instituto o en el colegio...
+
+¡Me parece una idea muy interesante y útil! El enfoque en la gamificación y el aprendizaje divertido es una tendencia muy efectiva en la educación actual, especialmente para las nuevas generaciones. Además, el hecho de que los estudiantes puedan crear y compartir sus propios tests agrega un componente social y de colaboración que puede ayudar a mejorar la calidad de los materiales educativos.
+
+En cuanto a la implementación técnica, sería necesario definir una arquitectura de base de datos sólida para almacenar todas las preguntas y respuestas, así como implementar un sistema de reconocimiento de voz confiable para la función de dictado por voz. Además, la integración de una API de autenticación y autorización sería necesaria para garantizar que los usuarios tengan acceso solo a los tests que han creado o que se les han compartido.
+
+En resumen, creo que esta aplicación tiene un gran potencial y puede ser muy útil para los estudiantes de todas las edades. ¡Buena suerte en el desarrollo del proyecto!
+
+¿Qué nombre se te ocurre para esta aplicación?
+
+Se me ocurren algunos posibles nombres para esta aplicación, basados en su objetivo de hacer el aprendizaje más entretenido y eficaz:
+
+MemoFun
+StudyPlay
+BrainBoost
+LearnQuest
+MindMaze
+SmartStudy
+QuizTrix
+EduGame
+MemoryMaster
+StudyGenius
+Espero que te resulten útiles estas sugerencias.
