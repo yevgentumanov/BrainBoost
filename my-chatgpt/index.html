@@ -31,12 +31,15 @@
                 
             </section>
             <section id="prompt">
-                <textarea id="promptbox" placeholder="Escribe tu mensaje" rows="5"></textarea>
+                <div>
+                    <textarea id="promptbox" placeholder="Escribe tu mensaje" rows="5"></textarea>
+                    <input type="button" id="enviar" class="button" value="">
+                </div>
+                
                 <div>
                     <input type="checkbox" id="unlock_chatgpt" value="Unlock">
                     <label for="unlock_chatgpt">Desbloquea todo el potencial de ChatGPT</label>
-                    <input type="button" id="enviar" value="Enviar">
-                    <input type="button" id="reset" value="Reiniciar conversación con ChatGPT">
+                    <input type="button" id="reset" class="button" value="Reiniciar conversación con ChatGPT">
                 </div>
             </section>
         </main>
