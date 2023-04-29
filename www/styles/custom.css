@@ -1,0 +1,28 @@
+.bg-dark {
+    background-color: #03231d !important;
+}
+
+body {
+    background-color: #ffcccc !important;
+}
+
+.form-control {
+    background-color: #ffcccc !important;
+    border-color: #03231d;
+    color: #03231d;
+}
+
+.navbar-toggler {
+    background-color: #ffcccc !important;
+    color: #03231d !important;
+}
+
+.navbar-toggler-icon {
+    color: #03231d !important;
+}
+
+.btn-success {
+    background-color: #ffcccc !important;
+    border-color: #03231d !important;
+    color: #03231d;
+}
