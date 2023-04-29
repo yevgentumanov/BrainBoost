@@ -1,7 +1,6 @@
 /*===============================================
                 CONSTANTES
 ===============================================*/
-//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
 // const CHATGPT_API_URL = "https://openai80.p.rapidapi.com/chat/completions";
 const CHATGPT_API_URL = "https://api.openai.com/v1/chat/completions";
 // const API_SUBSCRIBE_URL = "https://rapidapi.com/openai-api-openai-api-default/api/openai80";
@@ -24,6 +23,13 @@ const DEFAULT_BODY = {
     ]
 };
 
+const TipoAlerta = {
+    NONE: 0,
+    ERROR: 1,
+    SUCCESS: 2,
+    INFO: 3
+}
+
 /*==============================================
                 VARIABLES
 ===============================================*/
@@ -34,6 +40,7 @@ let conversacion; // Variable que almacena el section que contiene todos los div
 let unlock_chatgpt;
 let importar_chat; // Boton importar chat
 let exportar_chat; // Boton exportar chat
+let change_api_key; // Botón cambiar clave de API
 
 let mensajes = DEFAULT_BODY; // Variable que almacenará los mensajes en memoria RAM
 
@@ -47,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     unlock_chatgpt = document.querySelector("#unlock_chatgpt");
     importar_chat = document.querySelector("#importar_chat");
     exportar_chat = document.querySelector("#exportar_chat");
+    change_api_key = document.querySelector("#change_api_key")
 
     /*-- Añade controladores de eventos --*/
     enviar.addEventListener("click", fEnviarButton);
@@ -54,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     unlock_chatgpt.addEventListener("change", fUnlockCheck);
     importar_chat.addEventListener("change", fImportarChatButton);
     exportar_chat.addEventListener("click", fExportarChatButton);
+    change_api_key.addEventListener("click", fChangeApiKeyButton);
 
     /*-- Modificaciones iniciales de algunos elementos --*/
     importar_chat.setAttribute("capture", "Importar archivo")
@@ -69,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*-- Genera un aviso si el usuario no ha introducido su clave de RapidAPI de OpenAI --*/
     if (!localStorage.getItem("claveAPI")) {
-        mensajeEstado(true,
+        mensajeEstado(TipoAlerta.ERROR,
             "Necesaria clave de API",
             `Es necesario que ingreses una clave de API obtenida desde la página web <a href="${API_SUBSCRIBE_URL}" target="_blank">API ChatGPT</a>.`);
     }
@@ -87,7 +96,7 @@ function cargarConversacionJSON(jsonConversation = null) {
     }
 }
 
-function mensajeEstado(error = false, titulo = null, message = null) {
+function mensajeEstado(tipoMensaje, titulo = null, message = null) {
     estado.innerHTML = ""; // Borra el estado actual
     if (titulo != null && message != null) {
         /*-- Crea un encabezado para el mensaje --*/
@@ -101,10 +110,19 @@ function mensajeEstado(error = false, titulo = null, message = null) {
         /*-- Agrega estos elementos al div de estado --*/
         estado.append(encabezado, mensaje);
 
-        if (error) {
-            estado.className = "mensajeError";
-        } else {
-            estado.className = "mensajeExito";
+        switch (tipoMensaje) {
+            case TipoAlerta.NONE:
+                estado.className = "mensaje";
+                break;
+            case TipoAlerta.ERROR:
+                estado.className = "mensaje mensajeError";
+                break;
+            case TipoAlerta.SUCCESS:
+                estado.className = "mensaje mensajeExito";
+                break;
+            case TipoAlerta.INFO:
+                estado.className = "mensaje mensajeInfo";
+                break;
         }
     }
 }
@@ -257,9 +275,7 @@ function fEnviarButton(evento) {
 function fResetButton(evento) {
     conversacion.innerHTML = ""; // Borra todos los mensajes de la interfaz visual
     /*-- Borra los mensajes de la memoria interna --*/
-    mensajes.messages = [
-        {"role":ROLE_TYPES[0],"content":DEFAULT_SYSTEM_MESSAGE}
-    ];
+    mensajes.messages = DEFAULT_BODY.messages;
     unlock_chatgpt.disabled = false;
     unlock_chatgpt.checked = false;
     // console.dir(unlock_chatgpt);
@@ -273,20 +289,20 @@ function fDeleteMessageButton(evento) {
         /*-- Obtiene acceso a la lista completa de mensajes en la UI --*/
         let listaMensajes = Array.from(cajaMessage.parentElement.children);
 
-        /*-- Obtiene el índice del mensaje dentro de la interfaz visual --*/
-        let indice = listaMensajes.indexOf(cajaMessage);
+        /*-- Obtiene el índice del mensaje dentro de la memoria interna y dentro de la interfaz visual --*/
+        let indiceInterno = listaMensajes.indexOf(cajaMessage);
+        let indiceVisual = indiceInterno; // Por si se necesita (en este caso no)
+
+        /*-- Asegura si indice interfaz visual == indice array interno, para no cometer fallos --*/
+        if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
+            indiceInterno = indiceInterno + 1;
+        }
 
         /*-- Borra el mensaje de la interfaz visual --*/
         cajaMessage.remove();
 
         /*-- Borra el mensaje del array interno de mensajes: verifica si indice interfaz visual == indice array interno, para no cometer fallos --*/
-        if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
-            /*-- Borra el mensaje del array interno de mensajes --*/
-            mensajes.messages.splice(indice + 1, 1);
-        } else { // Cuando SÍ está desbloqueado todo el potencial de ChatGPT
-            /*-- Borra el mensaje del array interno de mensajes --*/
-            mensajes.messages.splice(indice, 1);
-        }
+        mensajes.messages.splice(indiceInterno, 1);
 
         /*-- Guarda los cambios hechos en el array interno de mensajes en el localStorage --*/
         // localStorage.setItem("messages", JSON.stringify(mensajes.messages))
@@ -311,7 +327,6 @@ function fEditMessageButton(evento) {
     editor.style.height = (message.clientHeight - (message.children.length - 1) * 8) + "px";
     // editor.rows = message.children.length;
     editor.className = "message";
-    // editor.addEventListener("blur", fMessageAreaEditorBlur); // Para controlar cuando abandone el foco, que se guarden los cambios
     
     /*-- Asegura si indice interfaz visual == indice array interno, para no cometer fallos --*/
     if (mensajes.messages[0].content == DEFAULT_SYSTEM_MESSAGE) { // Cuando no está desbloqueado todo el potencial de ChatGPT
@@ -468,4 +483,8 @@ function fExportarChatButton(evento) {
     element.click();
 
     document.body.removeChild(element);
+}
+
+function fChangeApiKeyButton(evento) {
+
 }

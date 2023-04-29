@@ -32,18 +32,23 @@ textarea {
     margin: 1em auto;
 }
 
-.mensajeError {
-    background-color: lightsalmon;
+.mensaje {
     border-radius: 10px;
     padding: 1em;
     margin: 1em;
 }
 
-.mensajeExito {
+.mensaje.mensajeError {
+    background-color: lightsalmon;
+    
+}
+
+.mensaje.mensajeExito {
     background-color: lightgreen;
-    border-radius: 10px;
-    padding: 1em;
-    margin: 1em;
+}
+
+.mensaje.mensajeInfo {
+    background-color: lightblue;
 }
 
 /*-- Header --*/
