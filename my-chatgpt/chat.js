@@ -43,6 +43,7 @@ let exportar_chat; // Boton exportar chat
 let change_api_key; // Botón cambiar clave de API
 
 let mensajes = DEFAULT_BODY; // Variable que almacenará los mensajes en memoria RAM
+let clave_api;
 
 document.addEventListener('DOMContentLoaded', () => {
     /*-- Crea las variables --*/
@@ -71,13 +72,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let messages = JSON.parse(localStorage.getItem("messages"));
     cargarConversacionJSON(messages);
 
+    /*-- Recupera la clave de API --*/
+    clave_api = localStorage.getItem("claveAPI")
+
     /*-- Presenta en la interfaz de usuario la conversación con ChatGPT --*/
     if (nuevosMensajes > 0) {
         actualizarConversacionUI();
     }
 
     /*-- Genera un aviso si el usuario no ha introducido su clave de RapidAPI de OpenAI --*/
-    if (!localStorage.getItem("claveAPI")) {
+    if (!clave_api) {
         mensajeEstado(TipoAlerta.ERROR,
             "Necesaria clave de API",
             `Es necesario que ingreses una clave de API obtenida desde la página web <a href="${API_SUBSCRIBE_URL}" target="_blank">API ChatGPT</a>.`);
@@ -234,8 +238,9 @@ function actualizarConversacionUI() {
 function fEnviarButton(evento) {
     // console.log(promptbox.value);
     /*-- Descarta que no hay una clave API para poder interactuar con ChatGPT --*/
-    if (!localStorage.getItem("claveAPI")) {
-        localStorage.setItem("claveAPI", promptbox.value);
+    if (!clave_api) {
+        clave_api = promptbox.value
+        localStorage.setItem("claveAPI", clave_api);
         mensajeEstado(false,
             "Clave de API guardada correctamente",
             'Para verificar que su clave es correcta, pruebe a enviarle un mensaje a ChatGPT.');
@@ -247,7 +252,7 @@ function fEnviarButton(evento) {
     /*-- Crea las variables necesarias para enviar el mensaje a ChatGPT --*/
     let headers = DEFAULT_HEADERS;
     // headers["X-RapidAPI-Key"] = localStorage.getItem("claveAPI")
-    headers.Authorization = headers.Authorization.replace("API_KEY", localStorage.getItem("claveAPI"));
+    headers.Authorization = headers.Authorization.replace("API_KEY", clave_api);
 
     /*-- Especifica el mensaje a la lista interna de mensajes del ChatGPT --*/
     if (mensajes.messages.length == 0) {
@@ -486,5 +491,9 @@ function fExportarChatButton(evento) {
 }
 
 function fChangeApiKeyButton(evento) {
-
+    clave_api = null;
+    /*-- Genera un aviso si el usuario no ha introducido su clave de RapidAPI de OpenAI --*/
+    mensajeEstado(TipoAlerta.INFO,
+        "Cambio de clave de API",
+        `Ingresa la nueva clave de la API obtenida desde la página web <a href="${API_SUBSCRIBE_URL}" target="_blank">API ChatGPT</a>.`);
 }
