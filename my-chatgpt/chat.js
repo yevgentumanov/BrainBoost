@@ -1,10 +1,28 @@
 /*===============================================
                 CONSTANTES
 ===============================================*/
-const CHATGPT_API_URL = "https://openai80.p.rapidapi.com/chat/completions";
-const API_SUBSCRIBE_URL = "https://rapidapi.com/openai-api-openai-api-default/api/openai80";
+//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
+// const CHATGPT_API_URL = "https://openai80.p.rapidapi.com/chat/completions";
+const CHATGPT_API_URL = "https://api.openai.com/v1/chat/completions";
+// const API_SUBSCRIBE_URL = "https://rapidapi.com/openai-api-openai-api-default/api/openai80";
+const API_SUBSCRIBE_URL = "https://platform.openai.com/account/api-keys";
+// const DEFAULT_HEADERS = {
+//     'content-type': 'application/json',
+//     'X-RapidAPI-Key': "",
+//     'X-RapidAPI-Host': 'openai80.p.rapidapi.com'
+// };
+const DEFAULT_HEADERS = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer API_KEY`
+}
 const DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant.";
 const ROLE_TYPES = ["system", "user", "assistant"]
+const DEFAULT_BODY = {
+    "model":"gpt-3.5-turbo",
+    "messages":[
+        {"role": ROLE_TYPES[0], "content": DEFAULT_SYSTEM_MESSAGE}
+    ]
+};
 
 /*==============================================
                 VARIABLES
@@ -17,12 +35,7 @@ let unlock_chatgpt;
 let importar_chat; // Boton importar chat
 let exportar_chat; // Boton exportar chat
 
-let mensajes = {
-    "model":"gpt-3.5-turbo",
-    "messages":[
-        {"role": ROLE_TYPES[0], "content": DEFAULT_SYSTEM_MESSAGE}
-    ]
-};
+let mensajes = DEFAULT_BODY; // Variable que almacenará los mensajes en memoria RAM
 
 document.addEventListener('DOMContentLoaded', () => {
     /*-- Crea las variables --*/
@@ -58,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!localStorage.getItem("claveAPI")) {
         mensajeEstado(true,
             "Necesaria clave de API",
-            `Es necesario que ingreses una clave de API obtenida desde la página web <a href="${API_SUBSCRIBE_URL}" target="_blank">RapidAPI</a>.`);
+            `Es necesario que ingreses una clave de API obtenida desde la página web <a href="${API_SUBSCRIBE_URL}" target="_blank">API ChatGPT</a>.`);
     }
 });
 
@@ -214,11 +227,9 @@ function fEnviarButton(evento) {
     mensajeEstado(); // Borra cualquier mensaje de estado anterior
 
     /*-- Crea las variables necesarias para enviar el mensaje a ChatGPT --*/
-    let headers = {
-		'content-type': 'application/json',
-		'X-RapidAPI-Key': localStorage.getItem("claveAPI"),
-		'X-RapidAPI-Host': 'openai80.p.rapidapi.com'
-	};
+    let headers = DEFAULT_HEADERS;
+    // headers["X-RapidAPI-Key"] = localStorage.getItem("claveAPI")
+    headers.Authorization = headers.Authorization.replace("API_KEY", localStorage.getItem("claveAPI"));
 
     /*-- Especifica el mensaje a la lista interna de mensajes del ChatGPT --*/
     if (mensajes.messages.length == 0) {
@@ -444,7 +455,6 @@ function fImportarChatButton(evento) {
     });
     
     this.value = "";
-
 }
 
 function fExportarChatButton(evento) {
