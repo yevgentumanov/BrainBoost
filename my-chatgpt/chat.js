@@ -238,7 +238,7 @@ function actualizarConversacionUI() {
 function fEnviarButton(evento) {
     // console.log(promptbox.value);
     /*-- Descarta que no hay una clave API para poder interactuar con ChatGPT --*/
-    if (!clave_api) {
+    if (!clave_api && window.confirm("Estás a punto de guardar una nueva clave de la API. ¿Confirmar?")) {
         clave_api = promptbox.value
         localStorage.setItem("claveAPI", clave_api);
         mensajeEstado(false,
