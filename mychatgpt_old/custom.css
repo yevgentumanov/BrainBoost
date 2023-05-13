@@ -1,0 +1,182 @@
+* {
+    /* box-sizing: border-box; */
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    box-sizing: border-box;
+}
+
+header > nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    box-sizing: border-box;
+}
+
+textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: medium;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 992px;
+    margin: 1em auto;
+}
+
+.mensaje {
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+}
+
+.mensaje.mensajeError {
+    background-color: lightsalmon;
+    
+}
+
+.mensaje.mensajeExito {
+    background-color: lightgreen;
+}
+
+.mensaje.mensajeInfo {
+    background-color: lightblue;
+}
+
+/*-- Header --*/
+#importar_chat {
+    display: none;
+}
+
+.button {
+    background-color: inherit;
+    border: 1px solid #ccc;
+    /* display: inline-block; */
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #eee;
+}
+
+.button:active {
+    background-color: #aaa;
+}
+
+/*-- Main --*/
+
+#conversacion {
+    background-color: lightgrey;
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+    margin-bottom: 14em;
+}
+
+#conversacion > div {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    margin-bottom: 1em;
+}
+
+#conversacion > div > span {
+    display: flex;
+    flex-direction: column;
+    /* float: left; */
+    /* width: calc(80 * 0.07rem); */
+    min-width: 100px;
+    /* flex-grow: 1; */
+    /* margin-right: 1em; */
+    font-weight: bold;
+}
+
+#conversacion > div > span > div > img.button {
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+#conversacion > div > span > div > img.button:hover {
+    background-color: #eee;
+}
+#conversacion > div > span > div > img.button:active {
+    background-color: #aaa;
+}
+
+#conversacion > div > .message {
+    /* flex-grow: 1; */
+    width: 100%;
+}
+
+#conversacion > div > .message > p {
+    margin-top: 0;
+}
+
+#conversacion > div > .message > .codigo {
+    background-color: #eee;
+    border-radius: 0.5em;
+    padding: 1em;
+}
+
+#prompt {
+    background-color: lightblue;
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em;
+    /* border-style: solid;
+    border-width: 1em;
+    border-color: white; */
+    
+    bottom: 0;
+    position: fixed;
+    width: calc(100% - 5em);
+    max-width: calc(992px - 4em);
+}
+
+#prompt > :nth-child(1) { /* Caja texto y botón enviar */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#prompt > :nth-child(1) > textarea { /* Caja texto */
+    flex-grow: 1;
+    margin-right: 1em;
+}
+
+#prompt > :nth-child(1) > input[type="button"]#enviar { /* botón enviar */
+    background-image: url("./sendIcon.svg");
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+}
+
+#prompt > div > .button {
+    background-color: #ffffff;
+}
+
+#prompt > div > .button:hover {
+    background-color: #eee;
+}
+
+#prompt > div > .button:active {
+    background-color: #aaa;
+}
+
+#enviar {
+    text-align: end;
+}

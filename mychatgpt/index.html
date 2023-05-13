@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyChatGPT</title>
+
+    <!-- <script src="./JSON/json.js"></script> -->
+    <script src="./JSON/api_rest.js"></script>
+    <script src="api.js"></script>
+    <script src="chat.js"></script>
+
+    <link rel="stylesheet" href="custom.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <img src="./logos/4.jpg" alt="MyChatGPT" height="96">
+                <h1>MyChatGPT</h1>
+                <div>
+                    <div class="d-flex-row flex-h-space-evenly">
+                        <label id="promptTokens">Prompt tokens: 0</label>
+                        <label id="completionTokens">Completion tokens: 0</label>
+                        <label id="totalTokens">Total tokens: 0</label>
+                    </div>
+                    <div>
+                        <label for="api_selector">Seleccionar API:</label>
+                        <select id="api_selector" class="button"></select>
+                        <input type="button" id="change_api_key" class="button" value="Cambiar clave API">
+                        <label for="importar_chat" class="">
+                            <span class="button">Importar chat</span>
+                        </label>
+                        <input type="file" id="importar_chat" value="Importar chat">
+                        <input type="button" id="exportar_chat" class="button" value="Exportar chat">
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div id="messageStateBox"></div>
+            <section id="conversacion">
+                
+            </section>
+            <section id="prompt">
+                <div>
+                    <textarea id="promptbox" placeholder="Escribe tu mensaje" rows="5"></textarea>
+                    <div>
+                        <input type="button" id="enviar" class="button" value="">
+                        <div>
+                            <input type="button" id="reset" class="button" alt="Reiniciar conversación con ChatGPT">
+                            <input type="button" id="saveChat" class="button" alt="Reiniciar conversación con ChatGPT">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex-row flex-v-align-end flex-wrap">
+                    <div class="d-flex-row flex-v-align-center">
+                        <label for="changeTemperature">Temperatura (1.00)</label>
+                        <input type="range" name="changeTemperature" id="changeTemperature" class="slider" min="0" max="2" step="0.05" value="1">
+                    </div>
+                    <div class="d-flex-grow-1 d-flex-row flex-v-align-center">
+                        <label for="changeMaxTokens">Máx. tokens (inf)</label>
+                        <input type="range" name="changeMaxTokens" id="changeMaxTokens" class="d-flex-grow-1 slider" min="0" max="4096" value="4096">    
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+/**
+     * Método que establece una nueva clave de API, y, opcionalmente, otra API distinta.
+     * @param {string} key Especifica una clave de la API elegida.
+     * @param {number} api (Opcional) Especifica una API de la API_ENUM.
+     */
+    setAPI(key, api = null) {
+        /*-- Asigna la clave de API --*/
+        this._keyAPI = key;
+
+        if (!api) {
+            if (this._api) {
+                this._headers = API_LIST_SETTINGS[this._api].DEFAULT_HEADERS; // Prepara el hueco para la nueva clave de API
+            } else {
+                this._headers = API_LIST_SETTINGS[1].DEFAULT_HEADERS;
+            }
+        } else {
+            /*=======================================
+                        Asigna la API
+            ========================================*/
+            /*-- Descarta que la API especificada no sea válida --*/
+            if (typeof(api) != "number" || !(api >= 0 && api < API_LIST_NUMERIC.length)) {
+                throw new Error("La API especificada no existe. Por favor, especifica un número de API válido. Ayúdate de la constante API_ENUM.")
+            }
+
+            /*-- Si la API especificada es NONE --*/
+            if (api = API_ENUM.NONE) {
+                this._api = api;
+                return;
+            }
+
+            /*-- Hace backup temporal de los mensajes para poder migrarlos luego a la estructura body de la nueva API --*/
+            const nombreArrayMensajesOld = API_LIST_SETTINGS[oldApi]["DEFAULT_ARRAY_MESSAGES_NAME"];
+            let mensajes = this._body[nombreArrayMensajesOld];
+
+            /*-- Asigna la API y sus datos de configuración --*/
+            let oldApi = this._api;
+            this._api = api;
+            this._headers = API_LIST_SETTINGS[api].DEFAULT_HEADERS;
+            this._engine = API_LIST_SETTINGS[api].ENGINE;       
+            this._body = API_LIST_SETTINGS[api].DEFAULT_BODY;
+
+            /*-- Configuración especial para el body: migra los mensajes de una API a otra --*/
+            const nombreArrayMensajesNew = API_LIST_SETTINGS[this._api]["DEFAULT_ARRAY_MESSAGES_NAME"];
+            this._body[nombreArrayMensajesNew] = mensajes; // Realiza la migración de mensajes
+
+            /*-- Configura la clave de API --*/
+            this._headers[API_LIST_SETTINGS[api].DEFAULT_AUTHPARAM_NAME] = this._headers[API_LIST_SETTINGS[api].DEFAULT_AUTHPARAM_NAME].replace("{API_KEY}", key); // Asigna la clave de API a las cabeceras
+        }
+    }

@@ -1,0 +1,79 @@
+/**
+ * Atención: Utilizar a modo de constructor global y único.
+ * Función que, en función de la conversación pasada por parámetro (en concreto, en función del atributo engine que tenga dentro) crea un objeto que maneje esta conversación con el motor adecuado.
+ * 
+ * Prioridad de los argumentos que se tiene en cuenta a la hora de la forma de crear el motor: api > engine > conversacion.
+ */
+function API_LOADER(conversacion = null, api = null, keyAPI = null, engine = 1) {
+    /*-- Realiza las verificaciones para ver como configurar la API y el motor --*/
+    if (conversacion) {
+        /*-- Descarta que los datos no sean correctos --*/
+        if (typeof(conversacion) != "object") {
+            throw new Error("El parámetro 'conversacion' pasado por parámetro no es un objeto JSON.");
+        }
+        if (!conversacion["engine"] || !conversacion["messages"]) {
+            throw new Error("El objeto 'conversacion' pasado por parámetro no es válido.");
+        }
+
+        /*-- Si hay api definida, toma como motor el de la API, de lo contrario, el del parametro conversacion --*/
+        let motor;
+        if (api && typeof(api) == "number" && (api >= 0 && api < API_LIST_NUMERIC.length)) {
+            motor = API_LIST_SETTINGS[api].ENGINE;
+        } else if (engine && typeof(engine) == "number" && (engine >= 0 && engine < API_ENGINE_LIST.length)) {
+            motor = engine;
+        } else {
+            motor = conversacion.engine;
+        }
+
+        /*-- Crea el motor con los datos especificados --*/
+        switch (motor) {
+            case API_ENGINE_ENUM.NONE:
+                throw new Error("Motor especificado como NINGUNO. Por favor, especifique un motor.")
+                break;
+            case API_ENGINE_ENUM.GENERIC:
+                /*-- Crea un objeto que implemente el motor especificado --*/
+                let motorApi = new API_CHATGPT_GENERIC(api, keyAPI); // Aquí da igual si están o no definidos api y keyAPI, ya se encarga el constructor de verificarlo
+
+                /*-- Importa la conversación: Crea un objeto que implemente el motor especificado --*/
+                motorApi.importConversation(conversacion)
+                return motorApi;
+                break;
+        }
+    } else if (api) {
+        /*-- Si no se ha podido cargar un motor mediante la importación de una conversación, cargamos un motor mediante el parámetro api --*/
+        /*-- Descarta que la api especificada sea inválida --*/
+        if (typeof(api) != "number" || !(api >= 0 && api < API_LIST_NUMERIC.length)) {
+            throw new Error("El tipo de API especificado es inválido.");
+        }
+
+        /*-- Si se ha especificado datos válidos de api... crea el motor --*/
+        const nombreMotor = API_LIST_SETTINGS[api].ENGINE;
+        switch (nombreMotor) {
+            case API_ENGINE_ENUM.NONE:
+                throw new Error("Motor especificado como NINGUNO. Por favor, especifique un motor.")
+                break;
+            case API_ENGINE_ENUM.GENERIC:
+                /*-- Crea un objeto que implemente el motor especificado --*/
+                let motorApi = new API_CHATGPT_GENERIC(api, keyAPI);
+                return motorApi;
+                break;
+        }
+    } else if (engine) {
+        if (typeof(engine) != "number" || !(engine >= 0 && engine < API_ENGINE_LIST.length)) {
+            throw new Error("Motor especificado inválido. Por favor, especifique uno ayudándose de la constante API_ENGINE_ENUM");
+        }
+        /*-- Crea el motor especificado --*/
+        switch (engine) {
+            case API_ENGINE_ENUM.NONE:
+                console.warn("Motor especificado como NINGUNO. Por favor, especifique un motor.");
+                break;
+            case API_ENGINE_ENUM.GENERIC:
+                let motorApi = new API_CHATGPT_GENERIC(api, keyAPI)
+                return motorApi;
+                break;
+        }
+    } else {
+        /*-- Si no se ha pasado por parámetro ni api, ni engine, ni conversacion --*/
+        throw new Error("No se ha pasado ningún parámetro a la función. Especifica al menos un 'engine' si no dispone de una conversacion (si lo desea, también especifique ahora una API y una clave de API, aunque podrá hacerlo más tarde utilizando setters)");
+    }
+}
