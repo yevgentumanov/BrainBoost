@@ -653,6 +653,7 @@ class API_CHATGPT_GENERIC extends API_CHATGPT_INTERFACE {
                     funcionControladorVista();
                 })
                 .catch(error => {
+                    console.error(error);
                     funcionErrorCase(error + "\n"
                     + "Es probable que la clave de API sea incorrecta.");
                     // + "URL: " + API_LIST_SETTINGS[this._api].CHATGPT_API_URL + "\n"
