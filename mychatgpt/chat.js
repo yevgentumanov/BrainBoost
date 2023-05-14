@@ -142,6 +142,7 @@ function cargarAPIsConClave() {
 
         /*-- Guarda como API seleccionada la primera del motor --*/
         localStorage.setItem(API_SELECTED_NAME_LS, 1);
+        return;
     }
 
     /*-- Verifica si hay alguna selección de API guardada en localStorage --*/
