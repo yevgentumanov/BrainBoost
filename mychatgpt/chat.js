@@ -502,7 +502,7 @@ function fEditMessageButton(evento) {
 
     /*-- Crea un select --*/
     let selectorRole = document.createElement("select");
-    for (let i = 0; i < API.getAvailableRoles().length; i++) {
+    for (let i = 1; i < API.getAvailableRoles().length; i++) {
         const option = document.createElement("option");
         option.value = i;
         option.textContent = API.getAvailableRoles()[i];
@@ -510,7 +510,7 @@ function fEditMessageButton(evento) {
 
         /*-- Si es que lo fuera, carga el rol actual para marcarlo como el rol por defecto en el desplegable --*/
         if (API.getMessageRole(indice) == API.getAvailableRoles()[i]) {
-            selectorRole.selectedIndex = i;
+            selectorRole.selectedIndex = i - 1;
         }
     }
 
