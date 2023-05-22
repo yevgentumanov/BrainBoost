@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 21-05-2023 a las 22:51:09
+-- Tiempo de generación: 22-05-2023 a las 00:49:11
 -- Versión del servidor: 10.11.2-MariaDB-1:10.11.2+maria~ubu2004
 -- Versión de PHP: 8.1.18
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `brainboost`
 --
+CREATE DATABASE IF NOT EXISTS `brainboost` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `brainboost`;
 
 -- --------------------------------------------------------
 
