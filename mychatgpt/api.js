@@ -644,7 +644,7 @@ class API_CHATGPT_GENERIC extends API_CHATGPT_INTERFACE {
 
         if (!streamMode) {
             /*-- Realiza la petición al servidor de la API en modo normal --*/
-            obtenerJSON(API_LIST_SETTINGS[this._api].CHATGPT_API_URL, "POST", this._headers, JSON.stringify(this._body), controller)
+            obtenerJSON(API_LIST_SETTINGS[this._api].CHATGPT_API_URL, "POST", this._headers, JSON.stringify(this._body), null, controller)
                 .then(response => {
                     this._body.messages.push({ "role": API_ENGINE_SETTINGS[this._engine].ROLE_TYPES_LIST[3], "content": response.choices[0].message.content })
                     console.log(response);
