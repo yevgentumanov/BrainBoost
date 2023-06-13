@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1454px" height="779px" style="background-color:#ffffff;">
+
+<!-- Connection Lines -->
+    <g>
+        <path d="M689 277L752.3083294619436 277.9066229647331" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+        <path d="M763 278L752.2607514860769 283.35430120148266L752.3083294619436 277.9066229647331L752.3559074378104 272.45894472798363Z" stroke="none" fill="#000000" stroke-width="1.5" stroke-dasharray="none" />
+    </g>
+    <g>
+        <path d="M665 284L755 323" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+    </g>
+    <g>
+        <path d="M666 269L739.241505065574 236.36947534377288" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+        <path d="M749 232L741.4678639541646 241.34167686162542L739.241505065574 236.36947534377288L737.0151461769833 231.3972738259203Z" stroke="none" fill="#000000" stroke-width="1.5" stroke-dasharray="none" />
+    </g>
+    <g>
+        <path d="M591 278L607 278" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+    </g>
+
+<!-- Linking Phrases -->
+    <g>
+        <g>
+            <text x="608px" y="281px" stroke="none" fill="#000000" stroke-width="1" stroke-dasharray="none" alignment-baseline="auto" text-anchor="start" text-decoration="normal" font-weight="normal" font-style="normal" font-size="8pt" font-family="Verdana">
+                <tspan>se</tspan><tspan fill="none">t</tspan><tspan>conecta</tspan><tspan fill="none">t</tspan><tspan>con</tspan>
+            </text>
+        </g>
+    </g>
+
+<!-- Concepts -->
+    <g>
+        <rect x="763px" y="264px" rx="8" ry="8" width="90px" height="27px" stroke="none" fill="#edf4f6" stroke-width="0" />
+        <rect x="763px" y="264px" rx="8" ry="8" width="90px" height="27px" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+        <g>
+            <text x="770px" y="282px" stroke="none" fill="#000000" stroke-width="1" stroke-dasharray="none" alignment-baseline="auto" text-anchor="start" text-decoration="normal" font-weight="normal" font-style="normal" font-size="8pt" font-family="Verdana">
+                <tspan>MateriasModel</tspan>
+            </text>
+        </g>
+    </g>
+    <g>
+        <rect x="742px" y="323px" rx="8" ry="8" width="90px" height="27px" stroke="none" fill="#edf4f6" stroke-width="0" />
+        <rect x="742px" y="323px" rx="8" ry="8" width="90px" height="27px" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+        <g>
+            <text x="749px" y="341px" stroke="none" fill="#000000" stroke-width="1" stroke-dasharray="none" alignment-baseline="auto" text-anchor="start" text-decoration="normal" font-weight="normal" font-style="normal" font-size="8pt" font-family="Verdana">
+                <tspan>TestController</tspan>
+            </text>
+        </g>
+    </g>
+    <g>
+        <rect x="744px" y="205px" rx="8" ry="8" width="67px" height="27px" stroke="none" fill="#edf4f6" stroke-width="0" />
+        <rect x="744px" y="205px" rx="8" ry="8" width="67px" height="27px" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+        <g>
+            <text x="751px" y="223px" stroke="none" fill="#000000" stroke-width="1" stroke-dasharray="none" alignment-baseline="auto" text-anchor="start" text-decoration="normal" font-weight="normal" font-style="normal" font-size="8pt" font-family="Verdana">
+                <tspan>TestModel</tspan>
+            </text>
+        </g>
+    </g>
+    <g>
+        <rect x="534px" y="265px" rx="8" ry="8" width="57px" height="27px" stroke="none" fill="#edf4f6" stroke-width="0" />
+        <rect x="534px" y="265px" rx="8" ry="8" width="57px" height="27px" stroke="#000000" fill="none" stroke-width="1" stroke-dasharray="none" />
+        <g>
+            <text x="541px" y="283px" stroke="none" fill="#000000" stroke-width="1" stroke-dasharray="none" alignment-baseline="auto" text-anchor="start" text-decoration="normal" font-weight="normal" font-style="normal" font-size="8pt" font-family="Verdana">
+                <tspan>TestVue</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
